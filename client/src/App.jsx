@@ -11,6 +11,7 @@ import Home from "./components/routes/Home";
 
 // Admin
 import Admin_home from "./components/routes/admin/Home";
+import Seller from "./components/routes/admin/Seller";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/admin" element={<Admin_home />} />
+          <Route path="/admin/seller" element={<Seller />} />
         </Routes>
         <Footer />
       </BrowserRouter>

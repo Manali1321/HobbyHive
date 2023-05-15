@@ -8,7 +8,9 @@ class Admin_home extends React.Component {
         <h2>Service</h2>
         <h2>Admin</h2>
         <h2>Employer</h2>
-        <h2>Seller</h2>
+        <a href="./admin/seller">
+          <h2>Seller</h2>
+        </a>
       </main>
     );
   }
