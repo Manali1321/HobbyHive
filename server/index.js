@@ -8,6 +8,13 @@ const path = require("path");
 const uri = "mongodb+srv://Manali1321:Arman1321@hobbyhive.kfghu4m.mongodb.net/?retryWrites=true&w=majority";
 const client = new MongoClient(uri);
 
+// Enable CORS middleware
+app.use(function (req, res, next) {
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+});
 
 const port = process.env.PORT || 8888;
 
@@ -15,9 +22,13 @@ const port = process.env.PORT || 8888;
 app.listen(port, () => {
   console.log(`Listening on http://localhost:${port}`);
 });
-app.get("/data", async (request, response) => {
+app.get("/seller", async (request, response) => {
   const seller = await sellerData();
   response.send(seller);
+});
+app.get("/employer", async (req, res) => {
+  const employer = await employerData();
+  res.send(employer);
 });
 
 // Function
@@ -37,5 +48,11 @@ async function sellerData() {
   var db = await connection();
   var collection = db.collection('seller')
   var results = await collection.find({}).limit(4).toArray();
+  return results;
+}
+async function employerData() {
+  var db = await connection();
+  var collection = db.collection('buyer')
+  var results = await collection.find({}).toArray();
   return results;
 }
