@@ -1,14 +1,18 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 class Nav extends React.Component {
   render() {
     return (
       <ul>
         <li>
-          <a href="/">Home</a>
+          <Link to="/">Home</Link>
         </li>
         <li>
-          <a href="/admin">Admin</a>
+          <Link to="/admin">Admin</Link>
+        </li>
+        <li>
+          <Link to="/login">User Login</Link>
         </li>
       </ul>
     );

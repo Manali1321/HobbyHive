@@ -10,9 +10,16 @@ function Seller() {
   });
   return (
     <main>
-      {data.map((d) => (
-        <p key={d._id}>{d.name}</p>
-      ))}
+      <table>
+        <tr>
+          <th>Name</th>
+        </tr>
+        {data.map((d) => (
+          <tr key={d._id}>
+            <td>{d.name}</td>
+          </tr>
+        ))}
+      </table>
     </main>
   );
 }
