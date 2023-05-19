@@ -44,12 +44,18 @@ app.get("/service", async (req, res) => {
 });
 // Add
 app.post("/category/add", async (req, res) => {
-  console.log(req.body);
   let newCategory = {
-    name: req.body.name
+    name: req.body.name,
+    service: req.body.service
   }
   await AddCategory(newCategory);
 });
+// Delete
+app.delete("/category/delete/:id", async (req, res) => {
+  const id = req.params.id;
+  console.log(id);
+  await DeleteCategory(id);
+})
 // Login
 app.post("/login", async (req, res) => {
   const credential = req.body;
@@ -117,4 +123,10 @@ async function AddCategory(newCategory) {
 }
 // Update
 // Delete
+async function DeleteCategory(id) {
+  var db = await connection();
+  var collection = db.collection("category");
+  var result = await collection.deleteOne({ _id: ObjectId(id) });
+  console.log("deleted");
+}
 // Credential Check
