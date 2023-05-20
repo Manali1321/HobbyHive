@@ -9,11 +9,15 @@ import Footer from "./components/Footer";
 // Landing page
 import Home from "./components/routes/Home";
 
-// Admin
+// ////////////******Admin
 import Admin_home from "./components/routes/admin/Home";
 import Seller from "./components/routes/admin/seller/Seller";
 import Employer from "./components/routes/admin/buyer/Buyer";
+// Service
 import Service from "./components/routes/admin/service/Service";
+import AddService from "./components/routes/admin/service/AddService";
+import DeleteService from "./components/routes/admin/service/DeleteService";
+
 // Category
 import Category from "./components/routes/admin/category/Category";
 import AddCat from "./components/routes/admin/category/AddCat";
@@ -45,6 +49,8 @@ function App() {
 
           {/* Service */}
           <Route path="/admin/service" element={<Service />} />
+          <Route path="/admin/service/add" element={<AddService />} />
+          <Route path="/admin/service/delete/:id" element={<DeleteService />} />
         </Routes>
         <Footer />
       </BrowserRouter>

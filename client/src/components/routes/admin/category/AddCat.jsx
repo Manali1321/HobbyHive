@@ -54,23 +54,25 @@ function AddCat() {
     navigate("/admin/category");
   };
   return (
-    <form onSubmit={handleSubmit}>
-      <label htmlFor="name">Name of Category:</label>
-      <input type="text" name="name" onChange={handleInput}></input>
-      <p htmlFor="service">Attached Service:</p>
-      {service.map((s) => (
-        <div key={s._id}>
-          <label htmlFor="service">{s.name}</label>
-          <input
-            type="checkbox"
-            name="service"
-            value={s.name}
-            onChange={handleInput}
-          ></input>
-        </div>
-      ))}
-      <button type="submit">Submit</button>
-    </form>
+    <main>
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="name">Name of Category:</label>
+        <input type="text" name="name" onChange={handleInput}></input>
+        <p htmlFor="service">Attached Service:</p>
+        {service.map((s) => (
+          <div key={s._id}>
+            <label htmlFor="service">{s.name}</label>
+            <input
+              type="checkbox"
+              name="service"
+              value={s._id}
+              onChange={handleInput}
+            ></input>
+          </div>
+        ))}
+        <button type="submit">Submit</button>
+      </form>
+    </main>
   );
 }
 export default AddCat;

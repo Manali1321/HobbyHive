@@ -1,22 +1,23 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 class Admin_home extends React.Component {
   render() {
     return (
       <main>
-        <a href="./admin/category">
+        <Link to="/admin/category">
           <h2>Category</h2>
-        </a>
-        <a href="./admin/service">
+        </Link>
+        <Link to="/admin/service">
           <h2>Service</h2>
-        </a>
+        </Link>
         <h2>Admin</h2>
-        <a href="./admin/employer">
+        <Link to="/admin/employer">
           <h2>Employer</h2>
-        </a>
-        <a href="./admin/seller">
+        </Link>
+        <Link to="/admin/seller">
           <h2>Seller</h2>
-        </a>
+        </Link>
       </main>
     );
   }

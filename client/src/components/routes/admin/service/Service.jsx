@@ -14,7 +14,6 @@ function Service() {
       <table>
         <thead>
           <tr>
-            <th>ID</th>
             <th>Name</th>
             <th>Edit</th>
             <th>Delete</th>
@@ -23,10 +22,9 @@ function Service() {
         <tbody>
           {service.map((s) => (
             <tr key={s._id}>
-              <td>{s._id}</td>
               <td>{s.name}</td>
               <td>
-                <Link to={`admin/service/update/${s._id}`}>
+                <Link to={`/admin/service/update/${s._id}`}>
                   <AiFillEdit /> Edit
                 </Link>
               </td>
@@ -37,10 +35,10 @@ function Service() {
               </td>
             </tr>
           ))}
-          <Link to="admin/service/add">
-            <button>Add Service</button>
-          </Link>
         </tbody>
+        <button>
+          <Link to="/admin/service/add">Add Service </Link>
+        </button>
       </table>
     </main>
   );

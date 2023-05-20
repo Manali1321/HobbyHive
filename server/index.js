@@ -50,11 +50,21 @@ app.post("/category/add", async (req, res) => {
   }
   await AddCategory(newCategory);
 });
+app.post("/service/add", async (req, res) => {
+  let newService = {
+    name: req.body,
+  }
+  await AddService(newService.name);
+});
 // Delete
 app.delete("/category/delete/:id", async (req, res) => {
   const id = req.params.id;
   console.log(id);
   await DeleteCategory(id);
+})
+app.delete("/service/delete/:id", async (req, res) => {
+  const id = req.params.id;
+  await DeleteService(id);
 })
 // Login
 app.post("/login", async (req, res) => {
@@ -121,11 +131,23 @@ async function AddCategory(newCategory) {
   var result = await collection.insertOne(newCategory);
   console.log("cat added");
 }
+async function AddService(newService) {
+  var db = await connection();
+  var collection = db.collection('service');
+  var result = await collection.insertOne(newService);
+  console.log("service added");
+}
 // Update
 // Delete
 async function DeleteCategory(id) {
   var db = await connection();
   var collection = db.collection("category");
+  var result = await collection.deleteOne({ _id: ObjectId(id) });
+  console.log("deleted");
+}
+async function DeleteService(id) {
+  var db = await connection();
+  var collection = db.collection("service");
   var result = await collection.deleteOne({ _id: ObjectId(id) });
   console.log("deleted");
 }
