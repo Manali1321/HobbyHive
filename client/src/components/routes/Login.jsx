@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Link } from "react-router-dom";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPass] = useState("");
@@ -40,30 +41,37 @@ function Login() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label htmlFor="email">Email Address:</label>
-      <input
-        type="text"
-        name="email"
-        id="email"
-        key="email"
-        value={email}
-        onChange={handleEmailChange}
-        placeholder="Enter your email address"
-      ></input>
-      <label htmlFor="password">Password:</label>
-      <input
-        type="password"
-        name="password"
-        id="password"
-        key="password"
-        value={password}
-        onChange={handlePasswordChange}
-        placeholder="Enter your password here"
-      ></input>
-      <button type="Submit">Submit</button>
-      <p>{error}</p>
-    </form>
+    <main>
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="email">Email Address:</label>
+        <input
+          type="text"
+          name="email"
+          id="email"
+          key="email"
+          value={email}
+          onChange={handleEmailChange}
+          placeholder="Enter your email address"
+        ></input>
+        <label htmlFor="password">Password:</label>
+        <input
+          type="password"
+          name="password"
+          id="password"
+          key="password"
+          value={password}
+          onChange={handlePasswordChange}
+          placeholder="Enter your password here"
+        ></input>
+        <button type="Submit">Submit</button>
+      </form>
+      <div>
+        <p>Don't Have Account yet??</p>
+        <Link to="/signup">
+          <button type="submit">Sign Up</button>
+        </Link>
+      </div>
+    </main>
   );
 }
 export default Login;

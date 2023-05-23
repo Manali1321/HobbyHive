@@ -152,3 +152,25 @@ async function DeleteService(id) {
   console.log("deleted");
 }
 // Credential Check
+
+
+
+// Get List of country
+// page route
+app.get('/signup', async (request, response) => {
+  var country = await countryData();
+  response.send(country);
+});
+
+async function countryData() {
+  const countriesnow_URL = "https://countriesnow.space/api/v0.1/countries/"; //base URL for any countriesnow_URL API requests
+  let requrl = `${countriesnow_URL}`;
+  let response = await fetch(requrl, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  let countriesnow_URLData = await response.json();
+  return countriesnow_URLData.data;
+}

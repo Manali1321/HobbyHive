@@ -34,12 +34,14 @@ function Category() {
           {category.map((c) => (
             <tr key={c._id}>
               <td>{c.name}</td>
-              {c.service.map((s) => {
-                const test = servicei.find((item) => item._id === s);
-                if (test) {
-                  return <td key={test._id}>{test.name}</td>;
-                }
-              })}
+              <td>
+                {c.service.map((s) => {
+                  const test = servicei.find((item) => item._id === s);
+                  if (test) {
+                    return <span key={test._id}>{test.name}</span>;
+                  }
+                })}
+              </td>
               <td>
                 <Link to={`/admin/category/update/${c._id}`}>
                   <AiFillEdit /> Edit

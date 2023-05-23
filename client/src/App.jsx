@@ -13,6 +13,8 @@ import Home from "./components/routes/Home";
 import Admin_home from "./components/routes/admin/Home";
 import Seller from "./components/routes/admin/seller/Seller";
 import Employer from "./components/routes/admin/buyer/Buyer";
+import AddEmployer from "./components/routes/Signup";
+
 // Service
 import Service from "./components/routes/admin/service/Service";
 import AddService from "./components/routes/admin/service/AddService";
@@ -35,12 +37,14 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<AddEmployer />} />
           {/* Admin */}
           <Route path="/admin" element={<Admin_home />} />
           {/* Seller */}
           <Route path="/admin/seller" element={<Seller />} />
           {/* Employer */}
           <Route path="/admin/employer" element={<Employer />} />
+
           {/* Category */}
           <Route path="/admin/category" element={<Category />} />
           <Route path="/admin/category/add" element={<AddCat />} />
