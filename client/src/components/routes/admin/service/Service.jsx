@@ -15,6 +15,7 @@ function Service() {
         <thead>
           <tr>
             <th>Name</th>
+            <th>Image</th>
             <th>Edit</th>
             <th>Delete</th>
           </tr>
@@ -23,6 +24,12 @@ function Service() {
           {service.map((s) => (
             <tr key={s._id}>
               <td>{s.name}</td>
+              <td>
+                <img
+                  src={`http://localhost:8888/storage/${s.image.data}`}
+                  width={200}
+                />
+              </td>
               <td>
                 <Link to={`/admin/service/update/${s._id}`}>
                   <AiFillEdit /> Edit
@@ -36,10 +43,13 @@ function Service() {
             </tr>
           ))}
         </tbody>
+      </table>
+
+      <div>
         <button>
           <Link to="/admin/service/add">Add Service </Link>
         </button>
-      </table>
+      </div>
     </main>
   );
 }

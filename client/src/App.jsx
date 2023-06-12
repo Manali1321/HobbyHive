@@ -19,6 +19,7 @@ import AddEmployer from "./components/routes/Signup";
 import Service from "./components/routes/admin/service/Service";
 import AddService from "./components/routes/admin/service/AddService";
 import DeleteService from "./components/routes/admin/service/DeleteService";
+import UpdateService from "./components/routes/admin/service/UpdateService";
 
 // Category
 import Category from "./components/routes/admin/category/Category";
@@ -28,6 +29,8 @@ import DeleteCat from "./components/routes/admin/category/DeleteCat";
 
 // Employer
 import Login from "./components/routes/Login";
+import DeleteBuyer from "./components/routes/admin/buyer/DeleteBuyer";
+import UpdateBuyer from "./components/routes/admin/buyer/UpdateBuyer";
 
 function App() {
   return (
@@ -38,6 +41,9 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<AddEmployer />} />
+          <Route path="/delete/:id" element={<DeleteBuyer />} />
+          <Route path="/update/:id" element={<UpdateBuyer />} />
+
           {/* Admin */}
           <Route path="/admin" element={<Admin_home />} />
           {/* Seller */}
@@ -54,6 +60,7 @@ function App() {
           {/* Service */}
           <Route path="/admin/service" element={<Service />} />
           <Route path="/admin/service/add" element={<AddService />} />
+          <Route path="/admin/service/update/:id" element={<UpdateService />} />
           <Route path="/admin/service/delete/:id" element={<DeleteService />} />
         </Routes>
         <Footer />

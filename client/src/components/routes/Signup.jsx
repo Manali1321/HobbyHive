@@ -2,39 +2,26 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 function AddEmployer() {
+  const navigate = useNavigate();
   const [data, setData] = useState({
     fName: "",
-    lname: "",
+    lName: "",
     email: "",
     phone: "",
-    country: "",
-    city: "",
     category: [],
-    role: "6468f0b21a076c81455aff1f",
+    password: "",
+    role_id: "3",
   });
-  const [country, setCountry] = useState([]);
-  const [city, setCity] = useState([]);
+
   const [category, setCategory] = useState([]);
+  const [password, setPassword] = useState("");
+  const [cpassword, setCpassword] = useState("");
+
   useEffect(() => {
-    axios.get("http://localhost:8888/signup").then(function (response) {
-      setCountry(() => response.data);
-    });
     axios.get("http://localhost:8888/category").then(function (response) {
       setCategory(() => response.data);
     });
   }, []);
-  async function handleCity(name) {
-    for (let i = 0; i < country.length; i++) {
-      if (country[i].country === name) {
-        console.log(country[i].city);
-        setCity(() => country[i].city);
-      }
-    }
-    console.log(city);
-  }
-  useEffect(() => {
-    console.log(city);
-  }, [city]);
 
   const handleInput = async (e) => {
     var { name, value, checked } = e.target;
@@ -43,17 +30,17 @@ function AddEmployer() {
         ...prevdata,
         fName: e.target.value,
       }));
-    } else if ((name = "lName")) {
+    } else if (name === "lName") {
       setData((prevdata) => ({
         ...prevdata,
         lName: e.target.value,
       }));
-    } else if ((name = "email")) {
+    } else if (name === "email") {
       setData((prevdata) => ({
         ...prevdata,
         email: e.target.value,
       }));
-    } else if ((name = "phone")) {
+    } else if (name === "phone") {
       setData((prevdata) => ({
         ...prevdata,
         phone: e.target.value,
@@ -70,53 +57,48 @@ function AddEmployer() {
           category: preveData.category.filter((s) => s !== value),
         }));
       }
+    } else if (name === "password") {
+      setData((prevdata) => ({
+        ...prevdata,
+        password: e.target.value,
+      }));
+    } else if (name === "cpassword") {
+      setCpassword(e.target.value);
     }
   };
+
+  function check() {
+    console.log("here i am" + cpassword);
+    if (data.password === cpassword) {
+      try {
+        const response = axios.post("http://localhost:8888/signup", data);
+        navigate("/login");
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      console.log("password not match");
+    }
+  }
   async function handleSubmit(event) {
     event.preventDefault();
-    await handleInput(e);
+    await handleInput(event);
     await check();
-    navigate("/login");
+    console.log(data);
   }
   return (
     <main>
       <p>Sign Up</p>
       <form onSubmit={handleSubmit}>
         <label htmlFor="fName">First Name:</label>
-        <input type="text" onChange={handleInput} name="fName"></input>
+        <input type="text" onChange={handleInput} name="fName" required />
         <label htmlFor="lName">Last Name:</label>
-        <input type="text" onChange={handleInput} name="lName"></input>
+        <input type="text" onChange={handleInput} name="lName" required />
         <label htmlFor="email">Email Address:</label>
-        <input type="text" onChange={handleInput} name="email"></input>
+        <input type="text" onChange={handleInput} name="email" required />
         <label htmlFor="phone">Phone:</label>
-        <input type="tel" onChange={handleInput} name="phone"></input>
-        <label htmlFor="country"> Country: </label>
-        <select name="country" onChange={(e) => handleCity(e.target.value)}>
-          <option type="text" value="none" key="" disabled>
-            Choose one country
-          </option>
-          {country.map((c) => (
-            <option
-              value={c.country}
-              key={c.country}
-              type="text"
-              name="country"
-            >
-              {c.country}
-            </option>
-          ))}
-        </select>
-        <lable htmlFor="city">City:</lable>
-        <select name="city" id="city">
-          <option type="text" value="none" key="" disabled>
-            Choose one city
-          </option>
-          {city.map((t) => (
-            <option value={t} key={t} type="text" name="city">
-              {t}
-            </option>
-          ))}
-        </select>
+        <input type="tel" onChange={handleInput} name="phone" required />
+
         <p htmlFor="category">Select category:</p>
         {category.map((s) => (
           <div key={s._id}>
@@ -126,9 +108,24 @@ function AddEmployer() {
               name="category"
               value={s._id}
               onChange={handleInput}
-            ></input>
+            />
           </div>
         ))}
+        <label htmlFor="password">Password:</label>
+        <input
+          type="password"
+          onChange={handleInput}
+          name="password"
+          required
+        />
+        <label htmlFor="cpassword">Confirm Password:</label>
+        <input
+          type="password"
+          onChange={handleInput}
+          name="cpassword"
+          required
+        />
+        <br></br>
         <button type="submit">Sign up</button>
       </form>
     </main>

@@ -5,30 +5,42 @@ function AddService() {
   const navigate = useNavigate();
   const [data, setData] = useState({
     name: "",
+    image: null,
   });
   const handleInput = (e) => {
-    setData({ name: e.target.value });
+    setData({ ...data, name: e.target.value });
   };
-  function check() {
+
+  const handleFileInput = (e) => {
+    setData({ ...data, image: e.target.files[0] });
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    var formData = new FormData();
+    formData.append("name", data.name);
+    formData.append("image", data.image);
+    console.log(data);
     try {
-      const response = axios
-        .post("http://localhost:8888/service/add", data)
+      axios
+        .post("http://localhost:8888/service/add", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
         .then(navigate("/admin/service"));
     } catch (err) {
       console.error(err);
     }
-  }
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    await handleInput(e);
-    await check();
+    navigate("/admin/service");
   };
 
   return (
     <main>
       <form onSubmit={handleSubmit}>
         <label htmlFor="service">Add Name of Service</label>
-        <input type="text" name="service" onChange={handleInput}></input>
+        <input type="text" name="service" onChange={handleInput} />
+        <label htmlFor="image">Add Image</label>
+        <input type="file" name="image" onChange={handleFileInput} />
         <button type="submit">Submit</button>
       </form>
     </main>

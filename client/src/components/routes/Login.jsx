@@ -52,7 +52,7 @@ function Login() {
           value={email}
           onChange={handleEmailChange}
           placeholder="Enter your email address"
-        ></input>
+        />
         <label htmlFor="password">Password:</label>
         <input
           type="password"
@@ -62,7 +62,7 @@ function Login() {
           value={password}
           onChange={handlePasswordChange}
           placeholder="Enter your password here"
-        ></input>
+        />
         <button type="Submit">Submit</button>
       </form>
       <div>
