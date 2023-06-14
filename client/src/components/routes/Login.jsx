@@ -50,6 +50,7 @@ function Login() {
           id="email"
           key="email"
           value={email}
+          autoComplete="email"
           onChange={handleEmailChange}
           placeholder="Enter your email address"
         />
@@ -61,6 +62,7 @@ function Login() {
           key="password"
           value={password}
           onChange={handlePasswordChange}
+          autoComplete="current-password"
           placeholder="Enter your password here"
         />
         <button type="Submit">Submit</button>

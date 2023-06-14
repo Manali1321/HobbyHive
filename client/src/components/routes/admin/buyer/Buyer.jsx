@@ -42,19 +42,19 @@ function Employer() {
                 {d.category.map((s) => {
                   const test = category.find((item) => item._id === s);
                   if (test) {
-                    return <span key={test._id}>{test.name}</span>;
+                    return <p key={test._id}>{test.name}</p>;
                   }
                 })}
               </td>
               <td>{d.password}</td>
-              <td>{new Date(d.created).toLocaleString()}</td>
+              <td>{d.timestemp}</td>
               <td>
                 <Link to={`/update/${d._id}`}>
                   <AiFillEdit /> Edit
                 </Link>
               </td>
               <td>
-                <Link to={`/delete/${d._id}`} value={d._id}>
+                <Link to={`/delete/${d._id}?fname=${d.first_name}`}>
                   <AiFillDelete /> Delete
                 </Link>
               </td>

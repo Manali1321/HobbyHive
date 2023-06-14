@@ -26,7 +26,7 @@ function Service() {
               <td>{s.name}</td>
               <td>
                 <img
-                  src={`http://localhost:8888/storage/${s.image.data}`}
+                  src={`http://localhost:8888/storage/service/${s.image.data}`}
                   width={200}
                 />
               </td>

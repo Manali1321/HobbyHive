@@ -20,6 +20,7 @@ function Category() {
 
   return (
     <main>
+      <h2>List of Category</h2>
       <table>
         <thead>
           <tr>
@@ -38,7 +39,7 @@ function Category() {
                 {c.service.map((s) => {
                   const test = servicei.find((item) => item._id === s);
                   if (test) {
-                    return <span key={test._id}>{test.name}</span>;
+                    return <p key={test._id}>{test.name}</p>;
                   }
                 })}
               </td>

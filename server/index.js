@@ -18,11 +18,17 @@ app.use(function (req, res, next) {
 });
 // Setup static image path to storage
 app.use("/storage", express.static("storage"));
-
 const port = process.env.PORT || 8888;
+
 // Convert form data in to json
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+app.use(express.json({
+  limit: '10mb'
+}));
+// to Reduce size will help to reduce error of payloadtoo large
+// const bodyParser = require("body-parser");
+// app.use(bodyParser.json({ limit: "1gb" }));
+// app.use(bodyParser.urlencoded({ limit: "10mb", extended: true }));
 
 // Router
 app.listen(port, () => {
@@ -45,17 +51,44 @@ app.get("/service", async (req, res) => {
   const service = await serviceData();
   res.send(service);
 });
+// Image
+// const uploadService = multer({
+//   storage: multer.diskStorage({
+//     destination: function (req, file, cb) {
+//       cb(null, "storage/service")
+//     },
+//     filename: function (req, file, cb) {
+//       cb(null, file.filename + "-" + Date.now() + ".jpg")
+//     }
+//   })
+// }).single("image");
+// const uploadSeller = multer({
+//   storage: multer.diskStorage({
+//     destination: function (req, file, cb) {
+//       cb(null, "storage")
+//     },
+//     filename: function (req, file, cb) {
+//       cb(null, file.filename + "-" + Date.now() + ".jpg")
+//     }
+//   })
+// }).single("photo");
+
+function createMulterMiddleware(destination, fieldName) {
+  return multer({
+    storage: multer.diskStorage({
+      destination: function (req, file, cb) {
+        cb(null, destination);
+      },
+      filename: function (req, file, cb) {
+        cb(null, file.filename + "-" + Date.now() + ".jpg");
+      },
+    }),
+  }).single(fieldName);
+}
+
+const uploadService = createMulterMiddleware("storage/service", "image");
+const uploadSeller = createMulterMiddleware("storage/seller", "image");
 // Add
-const upload = multer({
-  storage: multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, "storage")
-    },
-    filename: function (req, file, cb) {
-      cb(null, file.fieldname + "-" + Date.now() + ".jpg")
-    }
-  })
-}).single("image");
 app.post("/category/add", async (req, res) => {
   let newCategory = {
     name: req.body.name,
@@ -63,7 +96,10 @@ app.post("/category/add", async (req, res) => {
   }
   await AddCategory(newCategory);
 });
-app.post("/service/add", upload, async (req, res) => {
+
+app.post("/service/add", uploadService, async (req, res) => {
+  console.log(req.body)
+
   let newService = {
     name: req.body.name,
     image: {
@@ -71,6 +107,25 @@ app.post("/service/add", upload, async (req, res) => {
     }
   }
   await AddService(newService);
+});
+
+app.post("/seller/add", uploadSeller, async (req, res) => {
+  console.log(req.body)
+  let newSeller = {
+    first_name: req.body.fName,
+    last_name: req.body.lName,
+    email: req.body.email,
+    phone: req.body.phone,
+    image: {
+      data: req.file.filename
+    },
+    service: req.body.service,
+    password: req.body.password,
+    role_id: req.body.role_id,
+    timestemp: req.body.timestemp,
+
+  }
+  await AddSeller(newSeller);
 });
 app.post("/signup", async (req, res) => {
   let newUser = {
@@ -80,14 +135,14 @@ app.post("/signup", async (req, res) => {
     phone: req.body.phone,
     category: req.body.category,
     password: req.body.password,
-    role_id: req.body.role_id
+    role_id: req.body.role_id,
+    timestemp: req.body.timestemp
   }
   await AddUser(newUser);
 });
 // Delete
 app.delete("/category/delete/:id", async (req, res) => {
   const id = req.params.id;
-  // console.log(id);
   await DeleteCategory(id);
 })
 app.delete("/service/delete/:id", async (req, res) => {
@@ -102,7 +157,21 @@ app.delete("/delete/:id", async (req, res) => {
 // Buyer update
 app.get("/update/:id", async (req, res) => {
   const id = req.params.id;
-  await GetOne(id);
+  const selectedUser = await GetOne(id);
+  res.send(selectedUser);
+})
+app.put("/update/:id", async (req, res) => {
+  const id = req.params.id;
+  let newInfo = {
+    first_name: req.body.first_name,
+    last_name: req.body.last_name,
+    email: req.body.email,
+    phone: req.body.phone,
+    category: req.body.category,
+    password: req.body.password,
+    role_id: req.body.role_id,
+  }
+  await updateBuyer(newInfo, id, res)
 })
 // Service Update
 app.get("/admin/service/update/:id", async (req, res) => {
@@ -111,16 +180,34 @@ app.get("/admin/service/update/:id", async (req, res) => {
   const selectedService = await GetOneService(id);
   res.send(selectedService);
 })
-app.put("/admin/service/update/:id", upload, async (req, res) => {
+
+app.put("/admin/service/update/:id", uploadService, async (req, res) => {
   const id = req.params.id;
+  console.log(req.file)
   let newInfo = {
     name: req.body.name,
     image: {
       data: req.file.filename,
     }
   }
-  console.log(newInfo);
+  // console.log(newInfo);
   await updateService(newInfo, id, res)
+})
+// Category Update
+app.get("/admin/category/update/:id", async (req, res) => {
+  const id = req.params.id;
+  // console.log(id);
+  const selectedCat = await GetOneCat(id);
+  res.send(selectedCat);
+})
+app.put("/admin/category/update/:id", async (req, res) => {
+  const id = req.params.id;
+  let newInfo = {
+    name: req.body.name,
+    service: req.body.service
+  }
+  // console.log(newInfo);
+  await updateCat(newInfo, id, res)
 })
 // Login
 app.post("/login", async (req, res) => {
@@ -193,6 +280,12 @@ async function AddService(newService) {
   var result = await collection.insertOne(newService);
   console.log("service and image added");
 }
+async function AddSeller(newSeller) {
+  var db = await connection();
+  var collection = db.collection('seller');
+  var result = await collection.insertOne(newSeller);
+  console.log("Seller Added added");
+}
 async function AddUser(newUser) {
   var db = await connection();
   var collection = db.collection('buyer');
@@ -204,13 +297,20 @@ async function GetOne(id) {
   var db = await connection();
   var collection = db.collection('buyer');
   var result = await collection.findOne({ _id: new ObjectId(id) });
+
   return result;
+}
+async function updateBuyer(newInfo, id, res) {
+  var db = await connection();
+  var collection = db.collection('buyer');
+  var result = await collection.updateOne({ _id: new ObjectId(id) }, { $set: newInfo });
+  console.log("buyer updated");
+  res.send("Buyer is updated")
 }
 async function GetOneService(id) {
   var db = await connection();
   var collection = db.collection('service');
   var result = await collection.findOne({ _id: new ObjectId(id) });
-  // console.log(result);
   return result;
 }
 async function updateService(newInfo, id, res) {
@@ -219,6 +319,20 @@ async function updateService(newInfo, id, res) {
   var result = await collection.updateOne({ _id: new ObjectId(id) }, { $set: newInfo });
   console.log("service updated");
   res.send("Service is updated")
+}
+async function GetOneCat(id) {
+  var db = await connection();
+  var collection = db.collection('category');
+  var result = await collection.findOne({ _id: new ObjectId(id) });
+  console.log(result);
+  return result;
+}
+async function updateCat(newInfo, id, res) {
+  var db = await connection();
+  var collection = db.collection('category');
+  var result = await collection.updateOne({ _id: new ObjectId(id) }, { $set: newInfo });
+  console.log("cat updated");
+  res.send("Category is updated")
 }
 // Delete
 async function DeleteCategory(id) {

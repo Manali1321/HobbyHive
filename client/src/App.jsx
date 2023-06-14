@@ -12,6 +12,8 @@ import Home from "./components/routes/Home";
 // ////////////******Admin
 import Admin_home from "./components/routes/admin/Home";
 import Seller from "./components/routes/admin/seller/Seller";
+import AddSeller from "./components/routes/admin/seller/AddSeller";
+
 import Employer from "./components/routes/admin/buyer/Buyer";
 import AddEmployer from "./components/routes/Signup";
 
@@ -48,6 +50,8 @@ function App() {
           <Route path="/admin" element={<Admin_home />} />
           {/* Seller */}
           <Route path="/admin/seller" element={<Seller />} />
+          <Route path="/seller/add" element={<AddSeller />} />
+
           {/* Employer */}
           <Route path="/admin/employer" element={<Employer />} />
 

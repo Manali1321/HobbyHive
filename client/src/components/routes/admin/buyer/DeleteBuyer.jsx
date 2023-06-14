@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 function DeleteBuyer() {
   const navigate = useNavigate();
   const { id } = useParams();
-
+  const name = new URLSearchParams(location.search).get("fname");
   function confirmation(value) {
     if (value === true) {
       try {
@@ -20,7 +20,8 @@ function DeleteBuyer() {
   }
   return (
     <form>
-      <label>Do you want to Delete User?</label>
+      <label>Do you want to Delete {name}'s Account?</label>
+      <br></br>
       <button type="button" onClick={() => confirmation(true)}>
         Yes
       </button>

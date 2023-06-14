@@ -9,20 +9,15 @@ function AddService() {
   });
   const handleInput = (e) => {
     setData({ ...data, name: e.target.value });
-  };
-
-  const handleFileInput = (e) => {
     setData({ ...data, image: e.target.files[0] });
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    var formData = new FormData();
-    formData.append("name", data.name);
-    formData.append("image", data.image);
-    console.log(data);
+    // console.log(data);
     try {
       axios
-        .post("http://localhost:8888/service/add", formData, {
+        .post("http://localhost:8888/service/add", data, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -40,7 +35,7 @@ function AddService() {
         <label htmlFor="service">Add Name of Service</label>
         <input type="text" name="service" onChange={handleInput} />
         <label htmlFor="image">Add Image</label>
-        <input type="file" name="image" onChange={handleFileInput} />
+        <input type="file" name="image" onChange={handleInput} />
         <button type="submit">Submit</button>
       </form>
     </main>
