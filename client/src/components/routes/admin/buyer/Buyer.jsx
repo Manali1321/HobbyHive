@@ -1,19 +1,18 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState, useEffect, useContext } from "react";
 import { Link, json } from "react-router-dom";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
+import { api } from "../../../../utils/axios";
+import { CategoryContext } from "../../../../context/CategoryContext";
 
 function Employer() {
-  const [data, setData] = useState([]);
-  const [category, setCategory] = useState([]);
-
+  const [buyer, setBuyer] = useState([]);
+  // console.log(category);
+  const listData = async () => {
+    const resBuyer = await api.get("/admin/buyer");
+    setBuyer(resBuyer.data.buyer);
+  };
   useEffect(() => {
-    axios.get("http://localhost:8888/employer").then(function (response) {
-      setData(() => response.data);
-    });
-    axios.get("http://localhost:8888/category").then(function (response) {
-      setCategory(() => response.data);
-    });
+    listData();
   }, []);
   return (
     <main>
@@ -26,28 +25,23 @@ function Employer() {
             <th>Phone</th>
             <th>Category</th>
             <th>Password</th>
-            <th>Account Careated</th>
+            <th>role</th>
+
             <th>Edit</th>
             <th>Delete</th>
           </tr>
         </thead>
         <tbody>
-          {data.map((d) => (
+          {buyer.map((d) => (
             <tr key={d._id}>
-              <td>{d.first_name}</td>
-              <td>{d.last_name}</td>
-              <td>{d.email}</td>
-              <td>{d.phone}</td>
-              <td>
-                {d.category.map((s) => {
-                  const test = category.find((item) => item._id === s);
-                  if (test) {
-                    return <p key={test._id}>{test.name}</p>;
-                  }
-                })}
-              </td>
-              <td>{d.password}</td>
-              <td>{d.timestemp}</td>
+              <td>{d.user.first_name}</td>
+              <td>{d.user.last_name}</td>
+              <td>{d.user.email}</td>
+              <td>{d.user.phone}</td>
+              <td>{d.category.name}</td>
+              <td>{d.user.password}</td>
+              <td>{d.user.role}</td>
+
               <td>
                 <Link to={`/update/${d._id}`}>
                   <AiFillEdit /> Edit

@@ -1,44 +1,91 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { api } from "../../../../utils/axios";
+import { CategoryContext } from "../../../../context/CategoryContext";
+
 function AddService() {
   const navigate = useNavigate();
-  const [data, setData] = useState({
+  const { category, setCategory } = useContext(CategoryContext);
+  const [service, setService] = useState({
     name: "",
-    image: null,
+    // image: "",
+    category: "",
   });
-  const handleInput = (e) => {
-    setData({ ...data, name: e.target.value });
-    setData({ ...data, image: e.target.files[0] });
-  };
+  const [image, setImage] = useState();
 
+  const handleInput = (e) => {
+    const { name, value, files } = e.target;
+    if (name === "name") {
+      setService((prevService) => ({
+        ...prevService,
+        name: value,
+      }));
+    } else if (name === "image") {
+      setImage(files[0]);
+    } else if (name === "category") {
+      setService((prevService) => ({
+        ...prevService,
+        category: value,
+      }));
+    }
+  };
+  const uploadImage = async () => {
+    const data = new FormData();
+    data.append("file", image);
+    data.append("upload_preset", "wwxgqx9l");
+    data.append("cloud_name", "dywtcmvoo");
+    const response = await fetch(
+      "https://api.cloudinary.com/v1_1/dywtcmvoo/image/upload",
+      {
+        method: "POST",
+        body: data,
+      }
+    );
+    return await response.json();
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log(data);
-    try {
-      axios
-        .post("http://localhost:8888/service/add", data, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .then(navigate("/admin/service"));
-    } catch (err) {
-      console.error(err);
+    if (service.name !== "" && service.category !== "" && image) {
+      const result = await uploadImage();
+
+      try {
+        await api.post("admin/service/add", { ...service, image: result.url });
+        navigate("/admin/service");
+      } catch (err) {
+        console.error(err);
+      }
     }
-    navigate("/admin/service");
   };
+
+  const fetchData = async () => {
+    const resCategory = await api.get("/admin/category");
+    setCategory(resCategory.data);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <main>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="service">Add Name of Service</label>
-        <input type="text" name="service" onChange={handleInput} />
+      <form onSubmit={handleSubmit} encType="multipart/form-data">
+        <label htmlFor="name">Add Name of Service</label>
+        <input type="text" name="name" onChange={handleInput} />
         <label htmlFor="image">Add Image</label>
         <input type="file" name="image" onChange={handleInput} />
+        <label htmlFor="category">Category</label>
+        <select name="category" id="category" onChange={handleInput}>
+          {category &&
+            category.map((c) => (
+              <option value={c._id} key={c._id}>
+                {c.name}
+              </option>
+            ))}
+        </select>
         <button type="submit">Submit</button>
       </form>
     </main>
   );
 }
+
 export default AddService;

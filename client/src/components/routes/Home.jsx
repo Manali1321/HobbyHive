@@ -1,21 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { CategoryContext } from "../../context/CategoryContext";
+import { ServiceContext } from "../../context/ServiceContext";
+
 function Home() {
-  const navigate = useNavigate();
-  const [category, setCategory] = useState([]);
-  const [service, setService] = useState([]);
-  useEffect(() => {
-    axios.get("http://localhost:8888/service").then(function (response) {
-      setService(() => response.data);
-    });
-    axios.get("http://localhost:8888/category").then(function (response) {
-      setCategory(() => response.data);
-    });
-  }, []);
-  const handleClick = async (e) => {
-    navigate("/login");
-  };
+  const { category } = useContext(CategoryContext);
+  const { service } = useContext(ServiceContext);
+
   return (
     <main>
       <p>
@@ -27,32 +19,17 @@ function Home() {
       </p>
       <div>
         <h2>List of Service</h2>
-        {category.map((c) => (
-          <div key={c._id}>
-            <h3>{c.name}</h3>
-            <div className="service-wrapper">
-              {c.service.map((s) => {
-                const test = service.find((item) => item._id === s);
-                if (test) {
-                  return (
-                    <div
-                      key={test._id}
-                      className="service"
-                      onClick={handleClick}
-                    >
-                      <img
-                        src={`http://localhost:8888/storage/service/${test.image.data}`}
-                        width={175}
-                        height={200}
-                      />
-                      <h4>{test.name}</h4>
-                    </div>
-                  );
+        {category &&
+          category.map((c) => (
+            <div key={c._id}>
+              <h3>{c.name}</h3>
+              {service.map((s) => {
+                if (c._id === s.category) {
+                  return s.name;
                 }
               })}
             </div>
-          </div>
-        ))}
+          ))}
       </div>
     </main>
   );

@@ -9,7 +9,7 @@ function DeleteService() {
     if (value === true) {
       try {
         await axios
-          .delete(`http://localhost:8888/service/delete/${id}`)
+          .delete(`http://localhost:8888/admin/service/delete/${id}`)
           .then(navigate("/admin/service"));
         console.log("deleted");
       } catch (err) {

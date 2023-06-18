@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
+import { CategoryContext } from "../../../../context/CategoryContext";
+import { api } from "../../../../utils/axios";
 
 function UpdateBuyer() {
+  const { category } = useContext(CategoryContext);
   const { id } = useParams();
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -11,18 +14,14 @@ function UpdateBuyer() {
     last_name: "",
     email: "",
     phone: "",
-    category: [],
+    category: "",
     password: "",
-    role_id: "3",
   });
+  console.log(buyer);
   const [cpassword, setCpassword] = useState("");
-  const [category, setCategory] = useState([]);
   useEffect(() => {
-    axios.get(`http://localhost:8888/update/${id}`).then(function (response) {
+    api.get(`buyer/${id}`).then(function (response) {
       setBuyer(() => response.data);
-    });
-    axios.get("http://localhost:8888/category").then(function (response) {
-      setCategory(() => response.data);
     });
   }, []);
   const handlePassword = async (e) => {
@@ -53,32 +52,25 @@ function UpdateBuyer() {
         phone: e.target.value,
       }));
     } else if (name === "category") {
-      if (checked) {
-        setBuyer((preveData) => ({
-          ...preveData,
-          category: [...preveData.category, value],
-        }));
-      } else {
-        setBuyer((preveData) => ({
-          ...preveData,
-          category: preveData.category.filter((s) => s !== value),
-        }));
-      }
+      setBuyer((prevdata) => ({
+        ...prevdata,
+        category: e.target.value,
+      }));
     } else if (name === "password") {
       setBuyer((prevdata) => ({
         ...prevdata,
         password: e.target.value,
       }));
     }
-    // console.log(buyer);
+    console.log(buyer);
   };
   function check() {
-    console.log(buyer.password);
+    // console.log(buyer.password);
 
     if (buyer.password === cpassword) {
       try {
         axios
-          .put(`http://localhost:8888/update/${id}`, buyer)
+          .put(`/buyer/update/${id}`, buyer)
           .then(navigate("/admin/employer"));
       } catch (err) {
         console.log(err);
@@ -129,19 +121,19 @@ function UpdateBuyer() {
             value={buyer.phone}
           />
 
-          <p htmlFor="category">Select category:</p>
-          {category.map((s) => (
-            <div key={s._id}>
-              <label htmlFor="category">{s.name}</label>
-              <input
+          <label htmlFor="category">Select category:</label>
+          {/* <select name="category" onChange={handleInput}>
+            {category.map((c) => (
+              <option
                 type="checkbox"
-                name="category"
-                value={s._id}
-                checked={buyer.category.includes(s._id)}
-                onChange={handleInput}
-              />
-            </div>
-          ))}
+                key={c._id}
+                value={c._id}
+                className="mr-2"
+              >
+                {c.name}
+              </option>
+            ))}
+          </select> */}
           <label htmlFor="password">Password:</label>
           <input
             type="password"

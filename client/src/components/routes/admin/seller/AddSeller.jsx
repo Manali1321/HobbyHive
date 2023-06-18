@@ -1,43 +1,83 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { api } from "../../../../utils/axios";
+import { ServiceContext } from "../../../../context/ServiceContext";
 function AddSeller() {
+  const { service } = useContext(ServiceContext);
   const navigate = useNavigate();
   const [data, setData] = useState({
-    fName: "",
-    lName: "",
+    first_name: "",
+    last_name: "",
     email: "",
     phone: "",
-    service: "",
-    image: null,
-    sin: null,
-    work_permit: null,
-    photo_id: null,
-    business_number: null,
     password: "",
-    role_id: "4",
-    timestemp: new Date().toISOString().slice(0, 16),
+    service: "",
+    business_number: "",
+    // resume: null,
+    // portfolio: null,
   });
+  const [image, setImage] = useState();
+  const [workpermit, setWorkpermit] = useState();
+  const [sin, setSin] = useState();
+
   const [error, setError] = useState("");
-  const [service, setService] = useState([]);
 
   const [cpassword, setCpassword] = useState("");
 
-  useEffect(() => {
-    axios.get("http://localhost:8888/service").then(function (response) {
-      setService(() => response.data);
-    });
-  }, []);
-
+  const uploadImage = async () => {
+    const data = new FormData();
+    data.append("file", image);
+    data.append("upload_preset", "wwxgqx9l");
+    data.append("cloud_name", "dywtcmvoo");
+    const imageurl = await fetch(
+      "https://api.cloudinary.com/v1_1/dywtcmvoo/upload",
+      {
+        method: "POST",
+        body: data,
+      }
+    );
+    return await imageurl.json();
+  };
+  const uploadWork = async () => {
+    const data = new FormData();
+    data.append("file", workpermit);
+    data.append("upload_preset", "wwxgqx9l");
+    data.append("cloud_name", "dywtcmvoo");
+    const workurl = await fetch(
+      "https://api.cloudinary.com/v1_1/dywtcmvoo/upload",
+      {
+        method: "POST",
+        body: data,
+      }
+    );
+    return await workurl.json();
+  };
+  const uploadSin = async () => {
+    const data = new FormData();
+    data.append("file", sin);
+    data.append("upload_preset", "wwxgqx9l");
+    data.append("cloud_name", "dywtcmvoo");
+    const sinurl = await fetch(
+      "https://api.cloudinary.com/v1_1/dywtcmvoo/upload",
+      {
+        method: "POST",
+        body: data,
+      }
+    );
+    return await sinurl.json();
+  };
   const handleInput = async (e) => {
     console.log(e.target.name);
-    var { name } = e.target;
-    if (name === "fName") {
-      setData({ ...data, fName: e.target.value });
-    } else if (name === "lName") {
+    const { name, value, files } = e.target;
+    if (name === "first_name") {
       setData((prevdata) => ({
         ...prevdata,
-        lName: e.target.value,
+        first_name: e.target.value,
+      }));
+    } else if (name === "last_name") {
+      setData((prevdata) => ({
+        ...prevdata,
+        last_name: e.target.value,
       }));
     } else if (name === "email") {
       setData((prevdata) => ({
@@ -50,21 +90,22 @@ function AddSeller() {
         phone: e.target.value,
       }));
     } else if (name === "service") {
-      console.log(e.target.value);
       setData((prevdata) => ({
         ...prevdata,
         service: e.target.value,
       }));
-    } else if (name === "image") {
-      const file = e.target.files[0];
-      // const reader = new FileReader();
-      // reader.onloadend = () => {
+    } else if (name === "business_number") {
       setData((prevdata) => ({
         ...prevdata,
-        image: file,
+        business_number: e.target.value,
       }));
-      // };
-      // reader.readAsDataURL(file);
+      console.log(data);
+    } else if (name === "seller_image") {
+      setImage(files[0]);
+    } else if (name === "workpermit") {
+      setWorkpermit(files[0]);
+    } else if (name === "sin") {
+      setSin(files[0]);
     } else if (name === "password") {
       setData((prevdata) => ({
         ...prevdata,
@@ -75,83 +116,153 @@ function AddSeller() {
     }
   };
 
-  async function check() {
-    if (data.password === cpassword) {
-      try {
-        const response = await axios.post(
-          "http://localhost:8888/seller/add",
-          data,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-        navigate("/admin/seller");
-      } catch (err) {
-        console.log(err);
-      }
-    } else {
-      setError("password not match");
-    }
-  }
-  async function handleSubmit(event) {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    await check();
-    console.log(data);
-  }
+    const image = await uploadImage();
+    const work = await uploadWork();
+    const sin = await uploadSin();
+    const check = async (e) => {
+      if (data.password === cpassword) {
+        try {
+          const response = await api.post("/seller/signup", {
+            ...data,
+            workpermit: await work.url,
+            sin: await sin.url,
+            seller_image: await image.url,
+          });
+          console.log(response);
+          navigate("/admin/seller");
+        } catch (err) {
+          console.log(err);
+        }
+      } else {
+        setError("password not match");
+      }
+    };
+    check();
+  };
 
   return (
-    <main>
-      <p>To Become Seller</p>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="fName">First Name:</label>
-        <input type="text" onChange={handleInput} name="fName" required />
-        <label htmlFor="lName">Last Name:</label>
-        <input type="text" onChange={handleInput} name="lName" required />
-        <label htmlFor="email">Email Address:</label>
-        <input type="text" onChange={handleInput} name="email" required />
-        <label htmlFor="phone">Phone:</label>
+    <main className="flex flex-col items-center justify-center">
+      <p className="text-xl font-bold mb-4">To Become Seller</p>
+      <form className="w-64" onSubmit={handleSubmit}>
+        <label htmlFor="first_name" className="block mb-2">
+          First Name:
+        </label>
         <input
-          type="tel"
+          type="text"
+          onChange={handleInput}
+          name="first_name"
+          required
+          className="w-full border border-gray-300 px-3 py-2 mb-2 rounded"
+        />
+        <label htmlFor="last_name" className="block mb-2">
+          Last Name:
+        </label>
+        <input
+          type="text"
+          onChange={handleInput}
+          name="last_name"
+          required
+          className="w-full border border-gray-300 px-3 py-2 mb-2 rounded"
+        />
+        <label htmlFor="email" className="block mb-2">
+          Email Address:
+        </label>
+        <input
+          type="email"
+          onChange={handleInput}
+          name="email"
+          required
+          className="w-full border border-gray-300 px-3 py-2 mb-2 rounded"
+        />
+        <label htmlFor="phone" className="block mb-2">
+          Phone:
+        </label>
+        <input
+          type="number"
           onChange={handleInput}
           name="phone"
           autoComplete="phone"
           required
+          className="w-full border border-gray-300 px-3 py-2 mb-2 rounded"
         />
 
-        <label htmlFor="service">Select service of your service:</label>
-        <select name="service" onChange={handleInput}>
+        <label htmlFor="service" className="block mb-2">
+          Select service of your service:
+        </label>
+        <select
+          name="service"
+          onChange={handleInput}
+          className="w-full border border-gray-300 px-3 py-2 mb-2 rounded"
+        >
           {service.map((s) => (
-            <option
-              defaultValue={data.service === s._id}
-              key={s._id}
-              value={s._id}
-            >
+            <option key={s._id} value={s._id}>
               {s.name}
             </option>
           ))}
         </select>
-        <label htmlFor="image">Set Profile</label>
-        <input type="file" name="image" onChange={handleInput} />
-        <label htmlFor="password">Password:</label>
+        <label htmlFor="business_number" className="block mb-2">
+          Business Number:
+        </label>
+        <input
+          type="text"
+          onChange={handleInput}
+          name="business_number"
+          required
+          className="w-full border border-gray-300 px-3 py-2 mb-2 rounded"
+        />
+        <label htmlFor="seller_image" className="block mb-2">
+          Set your profile
+        </label>
+        <input
+          type="file"
+          name="seller_image"
+          onChange={handleInput}
+          className="mb-2"
+        />
+        <label htmlFor="workpermit" className="block mb-2">
+          Add your workpermit
+        </label>
+        <input
+          type="file"
+          name="workpermit"
+          onChange={handleInput}
+          className="mb-2"
+        />
+        <label htmlFor="sin" className="block mb-2">
+          Add social insurance number
+        </label>
+        <input type="file" name="sin" onChange={handleInput} className="mb-2" />
+        <label htmlFor="password" className="block mb-2">
+          Password:
+        </label>
         <input
           type="password"
           onChange={handleInput}
           name="password"
           autoComplete="new-password"
           required
+          className="w-full border border-gray-300 px-3 py-2 mb-2 rounded"
         />
-        <label htmlFor="cpassword">Confirm Password:</label>
+        <label htmlFor="cpassword" className="block mb-2">
+          Confirm Password:
+        </label>
         <input
           type="password"
           onChange={handleInput}
           name="cpassword"
           autoComplete="off"
           required
+          className="w-full border border-gray-300 px-3 py-2 mb-2 rounded"
         />
-        <p>{error}</p>
-        <button type="submit">Sign up</button>
+        <p className="text-red-500 mb-2">{error}</p>
+        <button
+          type="submit"
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+        >
+          Sign up
+        </button>
       </form>
     </main>
   );

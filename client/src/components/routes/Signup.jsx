@@ -1,39 +1,33 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { api } from "../../utils/axios";
+import { CategoryContext } from "../../context/CategoryContext";
 function AddEmployer() {
   const navigate = useNavigate();
+  const { category } = useContext(CategoryContext);
   const [data, setData] = useState({
-    fName: "",
-    lName: "",
+    first_name: "",
+    last_name: "",
     email: "",
     phone: "",
-    category: [],
+    category: "",
     password: "",
-    role_id: "3",
-    timestemp: new Date().toISOString().slice(0, 16),
   });
   const [error, setError] = useState("");
-  const [category, setCategory] = useState([]);
   const [cpassword, setCpassword] = useState("");
-
-  useEffect(() => {
-    axios.get("http://localhost:8888/category").then(function (response) {
-      setCategory(() => response.data);
-    });
-  }, []);
 
   const handleInput = async (e) => {
     var { name, value, checked } = e.target;
-    if (name === "fName") {
+    if (name === "first_name") {
       setData((prevdata) => ({
         ...prevdata,
-        fName: e.target.value,
+        first_name: e.target.value,
       }));
-    } else if (name === "lName") {
+    } else if (name === "last_name") {
       setData((prevdata) => ({
         ...prevdata,
-        lName: e.target.value,
+        last_name: e.target.value,
       }));
     } else if (name === "email") {
       setData((prevdata) => ({
@@ -46,17 +40,10 @@ function AddEmployer() {
         phone: e.target.value,
       }));
     } else if (name === "category") {
-      if (checked) {
-        setData((preveData) => ({
-          ...preveData,
-          category: [...preveData.category, value],
-        }));
-      } else {
-        setData((preveData) => ({
-          ...preveData,
-          category: preveData.category.filter((s) => s !== value),
-        }));
-      }
+      setData((prevdata) => ({
+        ...prevdata,
+        category: e.target.value,
+      }));
     } else if (name === "password") {
       setData((prevdata) => ({
         ...prevdata,
@@ -70,7 +57,8 @@ function AddEmployer() {
   function check() {
     if (data.password === cpassword) {
       try {
-        const response = axios.post("http://localhost:8888/signup", data);
+        const response = api.post("/buyer/signup", data);
+        console.log(response);
         navigate("/login");
       } catch (err) {
         console.log(err);
@@ -81,54 +69,119 @@ function AddEmployer() {
   }
   async function handleSubmit(event) {
     event.preventDefault();
-    await handleInput(event);
+    // await handleInput(event);
     await check();
     console.log(data);
   }
   return (
-    <main>
-      <p>Sign Up</p>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="fName">First Name:</label>
-        <input type="text" onChange={handleInput} name="fName" required />
-        <label htmlFor="lName">Last Name:</label>
-        <input type="text" onChange={handleInput} name="lName" required />
-        <label htmlFor="email">Email Address:</label>
-        <input type="text" onChange={handleInput} name="email" required />
-        <label htmlFor="phone">Phone:</label>
-        <input type="tel" onChange={handleInput} name="phone" required />
+    <main className="flex flex-col items-center justify-center h-screen bg-gray-100">
+      <p className="text-2xl font-bold mb-4">Sign Up</p>
+      <form
+        onSubmit={handleSubmit}
+        className="max-w-md bg-white rounded-md shadow-md p-6"
+      >
+        <label
+          htmlFor="first_name"
+          className="block text-gray-700 font-bold mb-2"
+        >
+          First Name:
+        </label>
+        <input
+          type="text"
+          onChange={handleInput}
+          name="first_name"
+          required
+          className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+        />
 
-        <p htmlFor="category">Which category you are intrested in:</p>
-        {category.map((s) => (
-          <div key={s._id}>
-            <label htmlFor="category">{s.name}</label>
-            <input
-              type="checkbox"
-              name="category"
-              value={s._id}
-              onChange={handleInput}
-            />
-          </div>
-        ))}
-        <label htmlFor="password">Password:</label>
+        <label
+          htmlFor="last_name"
+          className="block text-gray-700 font-bold mb-2"
+        >
+          Last Name:
+        </label>
+        <input
+          type="text"
+          onChange={handleInput}
+          name="last_name"
+          required
+          className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+        />
+
+        <label htmlFor="email" className="block text-gray-700 font-bold mb-2">
+          Email Address:
+        </label>
+        <input
+          type="email"
+          onChange={handleInput}
+          name="email"
+          required
+          className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+        />
+
+        <label htmlFor="phone" className="block text-gray-700 font-bold mb-2">
+          Phone:
+        </label>
+        <input
+          type="number"
+          onChange={handleInput}
+          name="phone"
+          required
+          className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+        />
+
+        <label className="block text-gray-700 font-bold mb-2">
+          Which category are you interested in:
+        </label>
+        <select
+          className="flex items-center mb-2"
+          name="category"
+          onChange={handleInput}
+        >
+          {category.map((c) => (
+            <option key={c._id} value={c._id} className="mr-2">
+              {c.name}
+            </option>
+          ))}
+        </select>
+
+        <label
+          htmlFor="password"
+          className="block text-gray-700 font-bold mb-2"
+        >
+          Password:
+        </label>
         <input
           type="password"
           onChange={handleInput}
           name="password"
           autoComplete="off"
           required
+          className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
         />
-        <label htmlFor="cpassword">Confirm Password:</label>
+
+        <label
+          htmlFor="cpassword"
+          className="block text-gray-700 font-bold mb-2"
+        >
+          Confirm Password:
+        </label>
         <input
           type="password"
           onChange={handleInput}
           name="cpassword"
           autoComplete="off"
           required
+          className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
         />
 
-        <p>{error}</p>
-        <button type="submit">Sign up</button>
+        <p className="text-red-500 mb-4">{error}</p>
+        <button
+          type="submit"
+          className="w-full px-4 py-2 bg-blue-500 text-white font-bold rounded-md hover:bg-blue-600"
+        >
+          Sign up
+        </button>
       </form>
     </main>
   );

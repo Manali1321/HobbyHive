@@ -1,73 +1,112 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { CategoryContext } from "../../../../context/CategoryContext";
+import { api } from "../../../../utils/axios";
 function UpdateService() {
-  const [image, setImage] = useState({
-    image: null,
-  });
-  const [data, setData] = useState({
+  const { category } = useContext(CategoryContext);
+  const [service, setService] = useState({
     name: "",
-    image: null,
+    image: "",
+    category: "",
   });
+  // const [check, setCheck] = useState("");
+  const [image, setImage] = useState();
   const { id } = useParams();
   const navigate = useNavigate();
+
+  const fetchData = async () => {
+    const fetchService = await api.get(`/admin/service/${id}`);
+    console.log(fetchService);
+    setService(fetchService.data);
+    // setCheck(fetchService.data.image);
+    // console.log(fetchService.data.image);
+    // setImage(fetchService.data.image);
+    // const resCategory = await api.get(`/admin/category/`);
+    // setCategory(resCategory.data);
+  };
   useEffect(() => {
-    axios
-      .get(`http://localhost:8888/admin/service/update/${id}`)
-      .then(function (response) {
-        setImage(response.data);
-        setData(response.data);
-      });
+    fetchData();
   }, []);
-  // console.log(data);
 
   const handleInput = (e) => {
-    setData({ ...data, name: e.target.value });
-  };
-  const handleFileInput = (e) => {
-    setData({ ...data, image: e.target.files[0] });
+    const { name, value, files } = e.target;
+    if (name === "name") {
+      setService((service) => ({
+        ...service,
+        name: value,
+      }));
+    } else if (name === "image") {
+      // console.log(files[0]);
+      setImage(files[0]);
+    } else if (name === "category") {
+      setService((prevService) => ({
+        ...prevService,
+        category: value,
+      }));
+    }
+    console.log(setImage);
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    var formData = new FormData();
-    formData.append("name", data.name);
-    formData.append("image", data.image);
-    console.log(formData.get("name"));
     try {
-      axios
-        .put(`http://localhost:8888/admin/service/update/${id}`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .then(navigate(`/admin/service/`));
+      const data = new FormData();
+
+      data.append("file", image);
+      data.append("upload_preset", "wwxgqx9l");
+      data.append("cloud_name", "dywtcmvoo");
+      const response = await fetch(
+        "https://api.cloudinary.com/v1_1/dywtcmvoo/image/upload",
+        {
+          method: "post",
+          body: data,
+        }
+      );
+      const result = await response.json();
+      console.log(result.url);
+
+      await api.put(`/admin/service/update/${id}`, {
+        ...service,
+        image: result.url,
+      });
+      console.log(service);
     } catch (err) {
       console.error(err);
     }
-    // navigate("/admin/service");
+    navigate("/admin/service");
   };
   return (
     <main>
       <p>Update Service</p>
-      {data.image && (
-        <img
-          src={`http://localhost:8888/storage/${image.image.data}`}
-          width={200}
-          alt="image of service"
-        />
+      {service.image && (
+        <img src={service.image} width={200} alt="image of service" />
       )}
       <form onSubmit={handleSubmit}>
-        <div key={data._id}>
-          <label htmlFor="service">Add Name of Service</label>
+        <div key={service._id}>
+          <label htmlFor="name">Add Name of Service</label>
           <input
             type="text"
-            name="service"
-            value={data.name}
+            name="name"
+            value={service.name}
             onChange={handleInput}
           />
 
           <label htmlFor="image">Edit Image</label>
-          <input type="file" name="image" onChange={handleFileInput} />
+          <input type="file" name="image" onChange={handleInput} />
+          <label htmlFor="category">Category</label>
+          <select
+            value={service.category}
+            name="category"
+            id="category"
+            onChange={handleInput}
+          >
+            <option value="">select value</option>
+            {category &&
+              category.map((c) => (
+                <option value={c._id} key={c._id}>
+                  {c.name}
+                </option>
+              ))}
+          </select>
           <button type="submit">Submit</button>
         </div>
       </form>

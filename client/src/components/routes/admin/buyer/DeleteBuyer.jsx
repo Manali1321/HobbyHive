@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import { api } from "../../../../utils/axios";
 function DeleteBuyer() {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -8,9 +8,7 @@ function DeleteBuyer() {
   function confirmation(value) {
     if (value === true) {
       try {
-        axios
-          .delete(`http://localhost:8888/delete/${id}`)
-          .then(navigate("/login"));
+        api.delete(`/buyer/delete/${id}`).then(navigate("/login"));
         console.log("Account has been deleted");
       } catch (err) {
         console.error(err);
