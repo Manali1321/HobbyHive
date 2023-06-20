@@ -1,47 +1,36 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useUserAuth } from "../../context/UserAuthContext";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPass] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { logIn } = useUserAuth();
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
-  const handlePasswordChange = (e) => {
-    setPass(e.target.value);
-  };
-
-  async function check() {
-    if (!email || !password) {
-      return "<p>Missing<p>";
+  const handleInput = (e) => {
+    var { name } = e.target;
+    if (name === "email") {
+      setEmail(e.target.value);
+    } else if (name === "password") {
+      setPass(e.target.value);
     }
-    try {
-      const response = await axios.post("http://localhost:8888/login", {
-        email,
-        password,
-      });
-      console.log(response.data);
-      if (response.data === "Good to go") {
-        navigate("/");
-      } else {
-        setError("* Wrong Password");
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    await check();
+    setError("");
+    try {
+      await logIn(email, password, "buyer");
+      navigate("/admin/seller");
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
   return (
     <main className="flex flex-col items-center justify-center h-screen bg-gray-100">
+      {error && <p>{error}</p>}
       <form
         onSubmit={handleSubmit}
         className="max-w-md bg-white rounded-md shadow-md p-6"
@@ -54,9 +43,9 @@ function Login() {
           name="email"
           id="email"
           key="email"
-          value={email}
+          required
+          onChange={handleInput}
           autoComplete="email"
-          onChange={handleEmailChange}
           placeholder="Enter your email address"
           className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
         />
@@ -72,8 +61,8 @@ function Login() {
           name="password"
           id="password"
           key="password"
-          value={password}
-          onChange={handlePasswordChange}
+          required
+          onChange={handleInput}
           autoComplete="current-password"
           placeholder="Enter your password here"
           className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"

@@ -58,50 +58,50 @@ connection();
 
 
 // Login
-// app.post("/login", async (req, res) => {
-//   const credential = req.body;
+app.post("/login", async (req, res) => {
+  const credential = req.body;
 
-//   // console.log(res);
-//   var db = await connection();
-//   var collection = db.collection('buyer')
-//   try {
-//     var check = await collection.findOne({ email: credential.email })
-//     if (check.password == credential.password) {
-//       console.log("Good to go");
-//       res.send("Good to go")
-//     } else {
-//       console.log("wrong password");
-//       res.send("wrong password")
-//     }
-//   } catch (error) {
-//     res.send("wrong details")
-//     console.error(error)
-//   }
-// }
-// );
-// app.post("/seller/login", async (req, res) => {
-//   const credential = req.body;
+  // console.log(res);
+  var db = await connection();
+  var collection = db.collection('buyer')
+  try {
+    var check = await collection.findOne({ email: credential.email })
+    if (check.password == credential.password) {
+      console.log("Good to go");
+      res.send("Good to go")
+    } else {
+      console.log("wrong password");
+      res.send("wrong password")
+    }
+  } catch (error) {
+    res.send("wrong details")
+    console.error(error)
+  }
+}
+);
+app.post("/seller/login", async (req, res) => {
+  const credential = req.body;
 
-//   // console.log(res);
-//   var db = await connection();
-//   var collection = db.collection('seller')
-//   try {
-//     var check = await collection.findOne({ email: credential.email })
-//     if (check.password === credential.password) {
-//       console.log("Good to go");
-//       if (check.role_id == "2") {
-//         console.log("user is seller");
-//         res.send([true, check._id]);
-//       } else if (check.role_id == "4") {
-//         console.log("user is waiting for approval");
-//         res.send([false, check._id])
-//       }
-//     } else {
-//       res.send(["wrong details", check._id])
-//     }
-//   } catch (error) {
-//     res.send(error)
-//     console.error(error)
-//   }
-// }
-// );
+  // console.log(res);
+  var db = await connection();
+  var collection = db.collection('seller')
+  try {
+    var check = await collection.findOne({ email: credential.email })
+    if (check.password === credential.password) {
+      console.log("Good to go");
+      if (check.role_id == "2") {
+        console.log("user is seller");
+        res.send([true, check._id]);
+      } else if (check.role_id == "4") {
+        console.log("user is waiting for approval");
+        res.send([false, check._id])
+      }
+    } else {
+      res.send(["wrong details", check._id])
+    }
+  } catch (error) {
+    res.send(error)
+    console.error(error)
+  }
+}
+);

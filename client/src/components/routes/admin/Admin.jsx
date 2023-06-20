@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import { api } from "../../../utils/axios";
 
 function SellerApproval() {
   const [seller, setSeller] = useState([]);
-
+  const navigate = useNavigate();
   // console.log(seller);
   const handleApprove = async (id) => {
     try {
@@ -24,6 +24,7 @@ function SellerApproval() {
     } catch (err) {
       console.log(err);
     }
+    navigate("/admin/seller-approval");
   };
 
   const handleDenied = async (id) => {
@@ -43,6 +44,7 @@ function SellerApproval() {
     } catch (err) {
       console.log(err);
     }
+    navigate("admin/seller-approval");
   };
 
   useEffect(() => {
@@ -112,9 +114,6 @@ function SellerApproval() {
           ))}
         </tbody>
       </table>
-      <button>
-        <Link to={`/seller/add`}>Create Seller</Link>
-      </button>
     </main>
   );
 }

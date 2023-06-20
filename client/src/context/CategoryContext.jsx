@@ -6,16 +6,22 @@ export const CategoryProvider = (props) => {
   const [category, setCategory] = useState(null);
   const fetchData = async () => {
     const resCategory = await api.get("/admin/category");
-    // const resService = await api.get("/admin/service");
     setCategory(resCategory.data);
-    // setService(resService.data);
   };
-
+  const refetchData = async () => {
+    fetchData();
+  };
   useEffect(() => {
     fetchData();
   }, []);
+  const contextValue = {
+    category,
+    setCategory,
+    refetchData,
+  };
+
   return (
-    <CategoryContext.Provider value={{ category, setCategory }}>
+    <CategoryContext.Provider value={contextValue}>
       {props.children}
     </CategoryContext.Provider>
   );

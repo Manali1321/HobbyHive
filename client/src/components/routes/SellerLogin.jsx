@@ -2,11 +2,14 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { useUserAuth } from "../../context/UserAuthContext";
+import { api } from "../../utils/axios";
 function SellerLogin() {
   const [email, setEmail] = useState("");
   const [password, setPass] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { logIn } = useUserAuth();
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -15,35 +18,45 @@ function SellerLogin() {
     setPass(e.target.value);
   };
 
-  async function check() {
-    if (!email || !password) {
-      return "<p>Missing<p>";
-    }
-    try {
-      const response = await axios.post("http://localhost:8888/seller/login", {
-        email,
-        password,
-      });
-      console.log(response);
-      if (response.data[0] === true) {
-        console.log("user is seller");
-      } else if (response.data === false) {
-        console.log("user is waiting");
-      }
-      navigate(`/seller/profile/${response.data[1]}`);
-    } catch (error) {
-      console.error(error);
-    }
-  }
+  // async function check() {
+  //   if (!email || !password) {
+  //     return "<p>Missing<p>";
+  //   }
+  //   try {
+  //     const response = await axios.post("http://localhost:8888/seller/login", {
+  //       email,
+  //       password,
+  //     });
+  //     console.log(response);
+  //     if (response.data[0] === true) {
+  //       console.log("user is seller");
+  //     } else if (response.data === false) {
+  //       console.log("user is waiting");
+  //     }
+  //     navigate(`/seller/profile/${response.data[1]}`);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    await check();
+    // await check();
+    setError("");
+    try {
+      await logIn(email, password, "seller");
+      const response = await api.post("/seller/signin", { email, password });
+      console.log(response.data);
+      const userId = response.data._id;
+      navigate(`/seller/update/${userId}`);
+    } catch (err) {
+      setError(err.message);
+    }
   };
-
   return (
     <main className="flex flex-col items-center justify-center h-screen bg-gray-100">
       <p className="text-2xl font-bold mb-4">Seller log in</p>
+      {error && <p>{error}</p>}
       <form
         onSubmit={handleSubmit}
         className="max-w-md bg-white rounded-md shadow-md p-6"
@@ -103,4 +116,5 @@ function SellerLogin() {
     </main>
   );
 }
+
 export default SellerLogin;

@@ -8,6 +8,7 @@ import Footer from "./components/Footer";
 
 // Landing page
 import Home from "./components/routes/Home";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 // ////////////******Admin
 import Admin_home from "./components/routes/admin/Home";
@@ -15,8 +16,7 @@ import Seller from "./components/routes/admin/seller/Seller";
 import SellerApproval from "./components/routes/admin/Admin";
 
 import AddSeller from "./components/routes/admin/seller/AddSeller";
-import SellerProfile from "./components/routes/SellerProfile";
-import UpdateSeller from "./components/routes/UpdateSeller";
+import UpdateSeller from "./components/routes/admin/seller/UpdateSeller";
 
 import DeleteSeller from "./components/routes/admin/seller/DeleteSeller";
 
@@ -51,18 +51,39 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<AddEmployer />} />
-          <Route path="/delete/:id" element={<DeleteBuyer />} />
+          <Route
+            path="/delete/:id"
+            element={
+              <ProtectedRoute>
+                <DeleteBuyer />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/update/:id" element={<UpdateBuyer />} />
 
           {/* Admin */}
           <Route path="/admin" element={<Admin_home />} />
           {/* Seller */}
-          <Route path="/admin/seller" element={<Seller />} />
+          <Route
+            path="/admin/seller"
+            element={
+              <ProtectedRoute>
+                <Seller />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/seller" element={<SellerHome />} />
           <Route path="/seller/login" element={<SellerLogin />} />
           <Route path="/seller/add" element={<AddSeller />} />
-          <Route path="/seller/profile/:id" element={<SellerProfile />} />
-          <Route path="/seller/update/:id" element={<UpdateSeller />} />
+
+          <Route
+            path="/seller/update/:id"
+            element={
+              // <ProtectedRoute allowedRoles={["seller"]}>
+              <UpdateSeller />
+              // </ProtectedRoute>
+            }
+          />
 
           <Route path="/seller/delete/:id" element={<DeleteSeller />} />
 

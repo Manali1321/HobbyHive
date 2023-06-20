@@ -10,6 +10,7 @@ function Employer() {
   const listData = async () => {
     const resBuyer = await api.get("/admin/buyer");
     setBuyer(resBuyer.data.buyer);
+    console.log(resBuyer.data.buyer);
   };
   useEffect(() => {
     listData();
@@ -33,7 +34,7 @@ function Employer() {
         </thead>
         <tbody>
           {buyer.map((d) => (
-            <tr key={d._id}>
+            <tr key={d.user._id}>
               <td>{d.user.first_name}</td>
               <td>{d.user.last_name}</td>
               <td>{d.user.email}</td>
@@ -41,14 +42,13 @@ function Employer() {
               <td>{d.category.name}</td>
               <td>{d.user.password}</td>
               <td>{d.user.role}</td>
-
               <td>
-                <Link to={`/update/${d._id}`}>
+                <Link to={`/update/${d.user._id}`}>
                   <AiFillEdit /> Edit
                 </Link>
               </td>
               <td>
-                <Link to={`/delete/${d._id}?fname=${d.first_name}`}>
+                <Link to={`/delete/${d.user._id}?fname=${d.user.first_name}`}>
                   <AiFillDelete /> Delete
                 </Link>
               </td>

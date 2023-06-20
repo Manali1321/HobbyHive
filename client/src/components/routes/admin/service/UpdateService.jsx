@@ -2,8 +2,11 @@ import React, { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { CategoryContext } from "../../../../context/CategoryContext";
 import { api } from "../../../../utils/axios";
+import { ServiceContext } from "../../../../context/ServiceContext";
 function UpdateService() {
   const { category } = useContext(CategoryContext);
+  const { refetchData } = useContext(ServiceContext);
+
   const [service, setService] = useState({
     name: "",
     image: "",
@@ -68,7 +71,7 @@ function UpdateService() {
         ...service,
         image: result.url,
       });
-      console.log(service);
+      refetchData();
     } catch (err) {
       console.error(err);
     }

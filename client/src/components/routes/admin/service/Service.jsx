@@ -1,10 +1,8 @@
-import React, { useState, useEffect, useContext } from "react";
-import axios from "axios";
+import React, { useContext } from "react";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { CategoryContext } from "../../../../context/CategoryContext";
 import { ServiceContext } from "../../../../context/ServiceContext";
-import { api } from "../../../../utils/axios";
 function Service() {
   const { service } = useContext(ServiceContext);
   const { category } = useContext(CategoryContext);
@@ -42,7 +40,7 @@ function Service() {
                   </Link>
                 </td>
                 <td>
-                  <Link to={`/admin/service/delete/${s._id}`} value={s._id}>
+                  <Link to={`/admin/service/delete/${s._id}?service=${s.name}`}>
                     <AiFillDelete /> Delete
                   </Link>
                 </td>

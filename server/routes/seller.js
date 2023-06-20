@@ -22,7 +22,7 @@ sellerRoutes.post('/signup', async (req, res) => {
       seller_image, service, workpermit, sin, business_number
       // , portfolio, resume
     })
-    console.log(seller)
+    // console.log(seller)
     res.json(seller)
 
   } catch (error) {
@@ -34,9 +34,6 @@ sellerRoutes.get("/:id", async (req, res) => {
   try {
     const id = req.params.id;
     var seller = await Seller.findOne({ user: id }).populate('user').populate('service').exec();
-    // const sellerData = {
-    //   seller, user
-    // }
     console.log(seller)
     res.send(seller);
   } catch (error) {
@@ -52,7 +49,7 @@ sellerRoutes.delete("/delete/:id", async (req, res) => {
     console.log(seller);
 
     var user = await User.deleteOne({ _id: id }).exec();
-    console.log(user);
+    // console.log(user);
 
     //res.send(seller, user);
     console.log("deleted");
@@ -72,14 +69,32 @@ sellerRoutes.put("/update/:id", async (req, res) => {
       user: user._id, status,
       seller_image, portfolio, service, workpermit, sin, resume
     })
-    console.log({ user, seller });
     res.send({ user, seller })
 
   } catch (error) {
     console.log("Update on seller" + error);
   }
 });
+sellerRoutes.post('/signin', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    console.log(email, password)
+    const user = await User.findOne({ email });
 
+    if (user && user.password === password) {
+      // Authentication successful
+      // console.log(user)
+      return res.json(user);
+    } else {
+      // Authentication failed
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+  } catch (error) {
+    // Handle any errors that occurred during the authentication process
+    console.log(error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 
 module.exports = sellerRoutes

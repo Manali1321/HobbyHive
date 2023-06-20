@@ -1,24 +1,28 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { api } from "../../../../utils/axios";
 import { CategoryContext } from "../../../../context/CategoryContext";
 
 function UpdateCat() {
-  const { category, setCategory } = useContext(CategoryContext);
+  const { category, refetchData } = useContext(CategoryContext);
+
+  const [update, setUpdate] = useState({
+    name: "",
+  });
   const { id } = useParams();
   const navigate = useNavigate();
   const fetchData = async () => {
     const resCategory = await api.get(`/admin/category/${id}`);
-    setCategory(resCategory.data);
+    setUpdate(resCategory.data);
   };
+
   useEffect(() => {
     fetchData();
-    console.log(category);
   }, []);
   const handleInput = (e) => {
     const { name } = e.target;
-    if (name == "name") {
-      setCategory((preveData) => ({
+    if (name == "category") {
+      setUpdate((preveData) => ({
         ...preveData,
         name: e.target.value,
       }));
@@ -28,29 +32,30 @@ function UpdateCat() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      api
-        .put(`admin/category/update/${id}`, category)
-        .then(navigate("/admin/category/"));
+      await api.put(`/admin/category/update/${id}`, update);
+      refetchData();
     } catch (err) {
       console.error(err);
     }
-    // navigate(`/admin/category/`);
+    navigate("/admin/category/");
   };
   return (
     <main>
       <p>Update Category</p>
-      <form onSubmit={handleSubmit}>
-        <div key={category._id}>
-          <label htmlFor="name">Name of Category:</label>
-          <input
-            type="text"
-            name="name"
-            onChange={handleInput}
-            value={category.name}
-          ></input>
-        </div>
-        <button type="submit">Submit</button>
-      </form>
+      <div>
+        <form onSubmit={handleSubmit}>
+          <div key={update._id}>
+            <label htmlFor="category">Name of Category:</label>
+            <input
+              type="text"
+              name="category"
+              onChange={handleInput}
+              value={update.name}
+            />
+          </div>
+          <button type="submit">Submit</button>
+        </form>
+      </div>
     </main>
   );
 }

@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useContext } from "react";
-import axios from "axios";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../../utils/axios";
 import { CategoryContext } from "../../context/CategoryContext";
+import { useUserAuth } from "../../context/UserAuthContext";
 function AddEmployer() {
   const navigate = useNavigate();
+  const { signUp } = useUserAuth();
   const { category } = useContext(CategoryContext);
   const [data, setData] = useState({
     first_name: "",
@@ -54,24 +55,23 @@ function AddEmployer() {
     }
   };
 
-  function check() {
+  async function check() {
     if (data.password === cpassword) {
       try {
+        await signUp(data.email, data.password);
         const response = api.post("/buyer/signup", data);
         console.log(response);
-        navigate("/login");
       } catch (err) {
         console.log(err);
       }
     } else {
-      setError("password not match");
+      setError("Password not match");
     }
+    navigate("/login");
   }
   async function handleSubmit(event) {
     event.preventDefault();
-    // await handleInput(event);
     await check();
-    console.log(data);
   }
   return (
     <main className="flex flex-col items-center justify-center h-screen bg-gray-100">
@@ -137,7 +137,11 @@ function AddEmployer() {
           className="flex items-center mb-2"
           name="category"
           onChange={handleInput}
+          defaultValue=""
         >
+          <option value="" disabled>
+            Select value
+          </option>
           {category.map((c) => (
             <option key={c._id} value={c._id} className="mr-2">
               {c.name}

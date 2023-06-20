@@ -1,12 +1,10 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { AiFillDelete, AiFillEdit } from "react-icons/ai";
 import { CategoryContext } from "../../../../context/CategoryContext";
-import { api } from "../../../../utils/axios";
 
 function Category() {
   const { category } = useContext(CategoryContext);
-
   return (
     <main>
       <h2>List of Category</h2>
@@ -29,7 +27,9 @@ function Category() {
                   </Link>
                 </td>
                 <td>
-                  <Link to={`/admin/category/delete/${c._id}`}>
+                  <Link
+                    to={`/admin/category/delete/${c._id}?category=${c.name}`}
+                  >
                     <AiFillDelete /> Delete
                   </Link>
                 </td>

@@ -1,13 +1,14 @@
-import React, { useContext, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import React, { useContext } from "react";
 import { CategoryContext } from "../../context/CategoryContext";
 import { ServiceContext } from "../../context/ServiceContext";
+import { useUserAuth } from "../../context/UserAuthContext";
 
 function Home() {
   const { category } = useContext(CategoryContext);
   const { service } = useContext(ServiceContext);
+  let { user } = useUserAuth;
 
+  console.log(user);
   return (
     <main>
       <p>
@@ -25,11 +26,23 @@ function Home() {
               <h3>{c.name}</h3>
               {service.map((s) => {
                 if (c._id === s.category) {
-                  return s.name;
+                  return (
+                    <div key={s._id}>
+                      <img src={s.image} alt={s.name} width={300} />
+                      <p>{s.name}</p>
+                    </div>
+                  );
                 }
               })}
             </div>
           ))}
+        In this updated code, the inner map function checks if the category ID
+        matches the category property of each service. If there is a match, it
+        returns the JSX elements with the service's image and name. If there is
+        no match, it returns null or you can omit that line if you don't want to
+        display anything for non-matching services. Note: Make sure that
+        category and service are valid arrays with the necessary data before
+        rendering this code.
       </div>
     </main>
   );

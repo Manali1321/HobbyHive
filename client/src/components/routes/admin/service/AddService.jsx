@@ -2,10 +2,13 @@ import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../../../../utils/axios";
 import { CategoryContext } from "../../../../context/CategoryContext";
+import { ServiceContext } from "../../../../context/ServiceContext";
 
 function AddService() {
   const navigate = useNavigate();
   const { category, setCategory } = useContext(CategoryContext);
+  const { refetchData } = useContext(ServiceContext);
+
   const [service, setService] = useState({
     name: "",
     // image: "",
@@ -50,6 +53,7 @@ function AddService() {
 
       try {
         await api.post("admin/service/add", { ...service, image: result.url });
+        refetchData();
         navigate("/admin/service");
       } catch (err) {
         console.error(err);
@@ -70,11 +74,20 @@ function AddService() {
     <main>
       <form onSubmit={handleSubmit} encType="multipart/form-data">
         <label htmlFor="name">Add Name of Service</label>
-        <input type="text" name="name" onChange={handleInput} />
+        <input type="text" name="name" onChange={handleInput} required />
         <label htmlFor="image">Add Image</label>
-        <input type="file" name="image" onChange={handleInput} />
+        <input type="file" name="image" onChange={handleInput} required />
         <label htmlFor="category">Category</label>
-        <select name="category" id="category" onChange={handleInput}>
+        <select
+          name="category"
+          id="category"
+          onChange={handleInput}
+          defaultValue=""
+          required
+        >
+          <option value="" disabled>
+            Select value
+          </option>
           {category &&
             category.map((c) => (
               <option value={c._id} key={c._id}>

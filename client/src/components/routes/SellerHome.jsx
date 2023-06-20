@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
 function SellerHome() {
   return (
     <main className="flex flex-col items-center justify-center h-screen bg-gray-100">

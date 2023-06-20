@@ -5,15 +5,18 @@ import App from "./App";
 import { CategoryProvider } from "./context/CategoryContext";
 import { ServiceProvider } from "./context/ServiceContext";
 import { ErrorProvider } from "./context/ErrorContext";
+import { UserAuthContextProvider } from "./context/UserAuthContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <ErrorProvider>
-      <CategoryProvider>
-        <ServiceProvider>
-          <App />
-        </ServiceProvider>
-      </CategoryProvider>
+      <UserAuthContextProvider>
+        <CategoryProvider>
+          <ServiceProvider>
+            <App />
+          </ServiceProvider>
+        </CategoryProvider>
+      </UserAuthContextProvider>
     </ErrorProvider>
   </React.StrictMode>
 );

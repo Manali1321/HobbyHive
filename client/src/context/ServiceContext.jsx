@@ -5,17 +5,23 @@ export const ServiceContext = createContext();
 export const ServiceProvider = (props) => {
   const [service, setService] = useState(null);
   const fetchData = async () => {
-    // const resCategory = await api.get("/admin/category");
     const resService = await api.get("/admin/service");
-    // setCategory(resCategory.data);
     setService(resService.data);
   };
-
+  const refetchData = async () => {
+    fetchData();
+  };
   useEffect(() => {
     fetchData();
   }, []);
+  const contextValue = {
+    service,
+    setService,
+    refetchData,
+  };
+
   return (
-    <ServiceContext.Provider value={{ service, setService }}>
+    <ServiceContext.Provider value={contextValue}>
       {props.children}
     </ServiceContext.Provider>
   );

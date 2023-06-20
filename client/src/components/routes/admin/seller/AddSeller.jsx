@@ -2,9 +2,17 @@ import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../../../../utils/axios";
 import { ServiceContext } from "../../../../context/ServiceContext";
+import { useUserAuth } from "../../../../context/UserAuthContext";
 function AddSeller() {
   const { service } = useContext(ServiceContext);
+  const { signUp } = useUserAuth();
+
   const navigate = useNavigate();
+  const [image, setImage] = useState();
+  const [workpermit, setWorkpermit] = useState();
+  const [sin, setSin] = useState();
+  const [error, setError] = useState("");
+  const [cpassword, setCpassword] = useState("");
   const [data, setData] = useState({
     first_name: "",
     last_name: "",
@@ -13,16 +21,7 @@ function AddSeller() {
     password: "",
     service: "",
     business_number: "",
-    // resume: null,
-    // portfolio: null,
   });
-  const [image, setImage] = useState();
-  const [workpermit, setWorkpermit] = useState();
-  const [sin, setSin] = useState();
-
-  const [error, setError] = useState("");
-
-  const [cpassword, setCpassword] = useState("");
 
   const uploadImage = async () => {
     const data = new FormData();
@@ -121,9 +120,10 @@ function AddSeller() {
     const image = await uploadImage();
     const work = await uploadWork();
     const sin = await uploadSin();
-    const check = async (e) => {
+    const check = async () => {
       if (data.password === cpassword) {
         try {
+          await signUp(data.email, data.password);
           const response = await api.post("/seller/signup", {
             ...data,
             workpermit: await work.url,
@@ -189,13 +189,18 @@ function AddSeller() {
         />
 
         <label htmlFor="service" className="block mb-2">
-          Select service of your service:
+          Which service you want to provide:
         </label>
         <select
           name="service"
           onChange={handleInput}
           className="w-full border border-gray-300 px-3 py-2 mb-2 rounded"
+          defaultValue=""
+          required
         >
+          <option value="" disabled>
+            Select value
+          </option>
           {service.map((s) => (
             <option key={s._id} value={s._id}>
               {s.name}
@@ -220,6 +225,7 @@ function AddSeller() {
           name="seller_image"
           onChange={handleInput}
           className="mb-2"
+          required
         />
         <label htmlFor="workpermit" className="block mb-2">
           Add your workpermit
@@ -229,11 +235,18 @@ function AddSeller() {
           name="workpermit"
           onChange={handleInput}
           className="mb-2"
+          required
         />
         <label htmlFor="sin" className="block mb-2">
           Add social insurance number
         </label>
-        <input type="file" name="sin" onChange={handleInput} className="mb-2" />
+        <input
+          type="file"
+          name="sin"
+          onChange={handleInput}
+          className="mb-2"
+          required
+        />
         <label htmlFor="password" className="block mb-2">
           Password:
         </label>
@@ -241,7 +254,6 @@ function AddSeller() {
           type="password"
           onChange={handleInput}
           name="password"
-          autoComplete="new-password"
           required
           className="w-full border border-gray-300 px-3 py-2 mb-2 rounded"
         />
@@ -252,7 +264,6 @@ function AddSeller() {
           type="password"
           onChange={handleInput}
           name="cpassword"
-          autoComplete="off"
           required
           className="w-full border border-gray-300 px-3 py-2 mb-2 rounded"
         />

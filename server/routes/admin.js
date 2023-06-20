@@ -13,7 +13,7 @@ adminRoutes.get("/seller/request", async (req, res) => {
 adminRoutes.get("/seller", async (req, res) => {
   try {
     const results = await Seller.find({}).populate('user').populate('service').exec();
-    console.log(results);
+    // console.log(results);
     res.send(results);
   } catch (error) {
     console.log('Error in get all seller routes' + error);
@@ -22,7 +22,7 @@ adminRoutes.get("/seller", async (req, res) => {
 adminRoutes.get("/buyer", async (req, res) => {
   try {
     const buyer = await Buyer.find().populate('user').populate('category').exec();
-    console.log(buyer)
+    // console.log(buyer)
     res.send({ buyer });
   } catch (error) {
     console.log('Error in get all buyer routes' + error);
