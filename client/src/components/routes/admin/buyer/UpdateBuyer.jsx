@@ -92,31 +92,48 @@ function UpdateBuyer() {
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <form onSubmit={handleSubmit}>
-          <p>Update Profile</p>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <p className="font-bold">Update Profile</p>
           <div>
-            <label htmlFor="first_name">First Name:</label>
+            <label htmlFor="first_name" className="block">
+              First Name:
+            </label>
             <input
               type="text"
               name="first_name"
               onChange={handleInput}
               value={data.first_name}
+              className="border border-gray-300 p-2"
             />
-            <label htmlFor="last_name">Last Name:</label>
+          </div>
+          <div>
+            <label htmlFor="last_name" className="block">
+              Last Name:
+            </label>
             <input
               type="text"
               onChange={handleInput}
               name="last_name"
               value={data.last_name}
+              className="border border-gray-300 p-2"
             />
-            <label htmlFor="email">Email Address:</label>
+          </div>
+          <div>
+            <label htmlFor="email" className="block">
+              Email Address:
+            </label>
             <input
               type="text"
               onChange={handleInput}
               name="email"
               value={data.email}
+              className="border border-gray-300 p-2"
             />
-            <label htmlFor="phone">Phone:</label>
+          </div>
+          <div>
+            <label htmlFor="phone" className="block">
+              Phone:
+            </label>
             <input
               type="tel"
               onChange={handleInput}
@@ -124,13 +141,18 @@ function UpdateBuyer() {
               required
               autoComplete="tel"
               value={data.phone}
+              className="border border-gray-300 p-2"
             />
-
-            <label htmlFor="category">Select category:</label>
+          </div>
+          <div>
+            <label htmlFor="category" className="block">
+              Select category:
+            </label>
             <select
               name="category"
               onChange={handleInput}
               value={data.category}
+              className="border border-gray-300 p-2"
             >
               <option value="">Select Value</option>
               {category &&
@@ -140,19 +162,37 @@ function UpdateBuyer() {
                   </option>
                 ))}
             </select>
-            <label htmlFor="password">Password:</label>
+          </div>
+          <div>
+            <label htmlFor="password" className="block">
+              Password:
+            </label>
             <input
               type="password"
               onChange={handleInput}
               name="password"
               value={data.password}
+              className="border border-gray-300 p-2"
             />
-            <label htmlFor="cpassword">Confirm Password:</label>
-            <input type="password" onChange={handleInput} name="cpassword" />
-            <br></br>
-            <p>{error}</p>
-            <button type="submit">Update your profile</button>
           </div>
+          <div>
+            <label htmlFor="cpassword" className="block">
+              Confirm Password:
+            </label>
+            <input
+              type="password"
+              onChange={handleInput}
+              name="cpassword"
+              className="border border-gray-300 p-2"
+            />
+          </div>
+          <p className="text-red-500">{error}</p>
+          <button
+            type="submit"
+            className="bg-blue-500 text-white px-4 py-2 rounded"
+          >
+            Update your profile
+          </button>
         </form>
       )}
     </main>

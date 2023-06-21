@@ -54,37 +54,37 @@ function SellerApproval() {
   }, []);
 
   return (
-    <main>
-      <table>
+    <main className="p-8">
+      <table className="w-full border border-gray-300">
         <thead>
-          <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Service</th>
-            <th>Photo</th>
-            <th>SIN</th>
-            <th>WorkPermit</th>
-            <th>Business Number</th>
-            <th>Password</th>
-            <th>Edit</th>
-            <th>Delete</th>
+          <tr className="bg-gray-100">
+            <th className="p-4">First Name</th>
+            <th className="p-4">Last Name</th>
+            <th className="p-4">Email</th>
+            <th className="p-4">Phone</th>
+            <th className="p-4">Service</th>
+            <th className="p-4">Photo</th>
+            <th className="p-4">SIN</th>
+            <th className="p-4">WorkPermit</th>
+            <th className="p-4">Business Number</th>
+            <th className="p-4">Password</th>
+            <th className="p-4">Edit</th>
+            <th className="p-4">Delete</th>
           </tr>
         </thead>
         <tbody>
           {seller.map((d) => (
-            <tr key={d._id}>
-              <td>{d.user.first_name}</td>
-              <td>{d.user.last_name}</td>
-              <td>{d.user.email}</td>
-              <td>{d.user.phone}</td>
-              <td>{d.service.name}</td>
-              <td>
-                <img src={d.seller_image} width={200} />
+            <tr key={d._id} className="border-b border-gray-300">
+              <td className="p-4">{d.user.first_name}</td>
+              <td className="p-4">{d.user.last_name}</td>
+              <td className="p-4">{d.user.email}</td>
+              <td className="p-4">{d.user.phone}</td>
+              {/* <td className="p-4">{d.service.name}</td> */}
+              <td className="p-4">
+                <img src={d.seller_image} width={200} alt="Seller" />
               </td>
-              <td>{d.business_number}</td>
-              <td>
+              <td className="p-4">{d.business_number}</td>
+              <td className="p-4">
                 <embed
                   src={d.workpermit}
                   type="application/pdf"
@@ -92,7 +92,7 @@ function SellerApproval() {
                   height="100px"
                 />
               </td>
-              <td>
+              <td className="p-4">
                 <embed
                   src={d.workpermit}
                   type="application/pdf"
@@ -100,13 +100,19 @@ function SellerApproval() {
                   height="100px"
                 />
               </td>
-              <td>
-                <button onClick={() => handleApprove(d.user._id)}>
+              <td className="p-4">
+                <button
+                  onClick={() => handleApprove(d.user._id)}
+                  className="bg-green-500 text-white px-4 py-2 rounded"
+                >
                   <AiFillEdit /> Approve
                 </button>
               </td>
-              <td>
-                <button onClick={() => handleDenied(d.user._id)}>
+              <td className="p-4">
+                <button
+                  onClick={() => handleDenied(d.user._id)}
+                  className="bg-red-500 text-white px-4 py-2 rounded"
+                >
                   <AiFillDelete /> Denied
                 </button>
               </td>

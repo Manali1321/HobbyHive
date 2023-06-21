@@ -29,10 +29,10 @@ function Nav() {
   // };
 
   return (
-    <main>
+    <nav className="bg-black">
       <ul className="flex gap-4">
         <li>
-          <Link to="/" className="text-blue-600 hover:text-blue-900 font-bold">
+          <Link to="/" className="text-white hover:text-blue-200 font-bold">
             Home
           </Link>
         </li>
@@ -41,19 +41,26 @@ function Nav() {
           <li>
             <Link
               to="/admin"
-              className="text-blue-600 hover:text-blue-900 font-bold"
+              className="text-white hover:text-blue-200 font-bold"
             >
               AdminHome
             </Link>
           </li>
         ) : null}
+
         {user ? (
           <>
             <li>
-              <p>Welcome {user && user.email}</p>
+              <p className="text-white font-bold">
+                Welcome {user && user.email}
+              </p>
             </li>
             <li>
-              <button type="submit" onClick={handleLogout}>
+              <button
+                type="submit"
+                onClick={handleLogout}
+                className="text-white hover:text-blue-200 font-bold"
+              >
                 Logout
               </button>
             </li>
@@ -63,7 +70,7 @@ function Nav() {
             <li>
               <Link
                 to="/login"
-                className="text-blue-600 hover:text-blue-900 font-bold"
+                className="text-white hover:text-blue-200 font-bold"
               >
                 Log In
               </Link>
@@ -71,7 +78,7 @@ function Nav() {
             <li>
               <Link
                 to="/seller"
-                className="text-blue-600 hover:text-blue-900 font-bold"
+                className="text-white hover:text-blue-200 font-bold"
               >
                 Seller
               </Link>
@@ -79,7 +86,7 @@ function Nav() {
           </>
         )}
       </ul>
-    </main>
+    </nav>
   );
 }
 

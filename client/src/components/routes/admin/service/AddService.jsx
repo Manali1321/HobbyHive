@@ -71,31 +71,67 @@ function AddService() {
   }, []);
 
   return (
-    <main>
-      <form onSubmit={handleSubmit} encType="multipart/form-data">
-        <label htmlFor="name">Add Name of Service</label>
-        <input type="text" name="name" onChange={handleInput} required />
-        <label htmlFor="image">Add Image</label>
-        <input type="file" name="image" onChange={handleInput} required />
-        <label htmlFor="category">Category</label>
-        <select
-          name="category"
-          id="category"
-          onChange={handleInput}
-          defaultValue=""
-          required
-        >
-          <option value="" disabled>
-            Select value
-          </option>
-          {category &&
-            category.map((c) => (
-              <option value={c._id} key={c._id}>
-                {c.name}
-              </option>
-            ))}
-        </select>
-        <button type="submit">Submit</button>
+    <main className="p-8">
+      <form
+        onSubmit={handleSubmit}
+        encType="multipart/form-data"
+        className="space-y-4"
+      >
+        <div>
+          <label htmlFor="name" className="text-lg font-bold">
+            Add Name of Service
+          </label>
+          <input
+            type="text"
+            name="name"
+            onChange={handleInput}
+            required
+            className="border border-gray-300 p-2 block w-full"
+          />
+        </div>
+        <div>
+          <label htmlFor="image" className="text-lg font-bold">
+            Add Image
+          </label>
+          <input
+            type="file"
+            name="image"
+            onChange={handleInput}
+            required
+            className="border border-gray-300 p-2 block w-full"
+          />
+        </div>
+        <div>
+          <label htmlFor="category" className="text-lg font-bold">
+            Category
+          </label>
+          <select
+            name="category"
+            id="category"
+            onChange={handleInput}
+            defaultValue=""
+            required
+            className="border border-gray-300 p-2 block w-full"
+          >
+            <option value="" disabled>
+              Select value
+            </option>
+            {category &&
+              category.map((c) => (
+                <option value={c._id} key={c._id}>
+                  {c.name}
+                </option>
+              ))}
+          </select>
+        </div>
+        <div>
+          <button
+            type="submit"
+            className="bg-blue-500 text-white px-4 py-2 rounded"
+          >
+            Submit
+          </button>
+        </div>
       </form>
     </main>
   );

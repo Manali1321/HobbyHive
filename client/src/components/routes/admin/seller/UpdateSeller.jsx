@@ -250,34 +250,46 @@ function UpdateSeller() {
   };
 
   return (
-    <main>
+    <main className="bg-blue-300 py-10">
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <form onSubmit={handleSubmit}>
-          {userrole === "seller" && seller.status === "rejected" ? (
+        <form
+          onSubmit={handleSubmit}
+          className="max-w-md mx-auto border-4 border-gray-300 p-14"
+        >
+          {seller.status === "rejected" ? (
             <>
-              <label htmlFor="first_name">First Name:</label>
+              <label htmlFor="first_name" className="block mb-2">
+                First Name:
+              </label>
               <input
                 type="text"
                 onChange={handleInput}
                 value={data.first_name}
                 name="first_name"
                 required
+                className="border border-gray-300 p-2 mb-2 focus:outline-none focus:border-blue-500"
               />
-              <label htmlFor="last_name">Last Name:</label>
+              <label htmlFor="last_name" className="block mb-2">
+                Last Name:
+              </label>
               <input
                 type="text"
                 value={data.last_name}
                 onChange={handleInput}
                 name="last_name"
                 required
+                className="border border-gray-300 p-2 mb-2 focus:outline-none focus:border-blue-500"
               />
-              <label htmlFor="service">Select service of your service:</label>
+              <label htmlFor="service" className="block mb-2">
+                Select service of your service:
+              </label>
               <select
                 name="service"
                 onChange={handleInput}
                 value={data.service._id}
+                className="border border-gray-300 p-2 mb-2 focus:outline-none focus:border-blue-500"
               >
                 <option value="">Select Value</option>
                 {service &&
@@ -287,20 +299,23 @@ function UpdateSeller() {
                     </option>
                   ))}
               </select>
-              <label htmlFor="business_number">Business Number:</label>
+              <label htmlFor="business_number" className="block mb-2">
+                Business Number:
+              </label>
               <input
                 type="text"
                 onChange={handleInput}
                 value={data.business_number}
                 name="business_number"
                 required
+                className="border border-gray-300 p-2 mb-2 focus:outline-none focus:border-blue-500"
               />
-              <div>
+              <div className="mb-2">
                 <label htmlFor="seller_image">Update your profile</label>
                 <img src={seller.seller_image} width={100} />
                 <input type="file" name="seller_image" onChange={handleInput} />
               </div>
-              <div>
+              <div className="mb-2">
                 <label htmlFor="workpermit">Update Workpermit</label>
                 <embed
                   src={seller.workpermit}
@@ -309,7 +324,7 @@ function UpdateSeller() {
                 />
                 <input type="file" name="workpermit" onChange={handleInput} />
               </div>
-              <div>
+              <div className="mb-2">
                 <embed
                   src={seller.sin}
                   type="application/pdf"
@@ -321,56 +336,94 @@ function UpdateSeller() {
             </>
           ) : (
             <>
-              <label htmlFor="first_name">First Name:</label>
-              <input
-                type="text"
-                disabled="disabled"
-                value={data.first_name}
-                name="first_name"
-              />
-              <label htmlFor="last_name">Last Name:</label>
-              <input
-                type="text"
-                value={data.last_name}
-                name="last_name"
-                disabled="disabled"
-              />
-              <label htmlFor="service">Your service:</label>
-              <input
-                type="text"
-                value={data.service.name}
-                name="email"
-                disabled="disabled"
-              />
-              <div>
-                <p>Profile:</p>
-                <img src={seller.seller_image} width={100} />
+              <div className="flex-container">
+                <div className="details">
+                  <label htmlFor="first_name" className="block mb-2">
+                    First Name:
+                  </label>
+                  <input
+                    type="text"
+                    disabled="disabled"
+                    value={data.first_name}
+                    name="first_name"
+                    className="border border-gray-300 p-2 mb-2 bg-gray-100"
+                  />
+                  <label htmlFor="last_name" className="block mb-2">
+                    Last Name:
+                  </label>
+                  <input
+                    type="text"
+                    value={data.last_name}
+                    name="last_name"
+                    disabled="disabled"
+                    className="border border-gray-300 p-2 mb-2 bg-gray-100"
+                  />
+                  <label htmlFor="service" className="block mb-2">
+                    Your service:
+                  </label>
+                  <input
+                    type="text"
+                    value={data.service.name}
+                    name="email"
+                    disabled="disabled"
+                    className="border border-gray-300 p-2 mb-2 bg-gray-100"
+                  />
+                  <label htmlFor="email" className="block mb-2">
+                    Email:
+                  </label>
+                  <input
+                    type="text"
+                    value={data.email}
+                    name="email"
+                    disabled="disabled"
+                    className="border border-gray-300 p-2 mb-2 bg-gray-100"
+                  />
+                  <label htmlFor="phone" className="block mb-2">
+                    Phone:
+                  </label>
+                  <input
+                    type="text"
+                    value={data.phone}
+                    name="phone"
+                    disabled="disabled"
+                    className="border border-gray-300 p-2 mb-2 bg-gray-100"
+                  />
+                </div>
+                <div className="image-container">
+                  <div className="mb-2">
+                    <div>
+                      <p>Profile:</p>
+                      <img
+                        src={seller.seller_image}
+                        width={300}
+                        alt="Profile"
+                      />
+                    </div>
+                    {seller.resume ? (
+                      <div className="mb-2">
+                        <p>Your Resume</p>
+                        <embed
+                          src={seller.resume}
+                          type="application/pdf"
+                          className="w-30 h-60"
+                        />
+                      </div>
+                    ) : null}
+                    {seller.portfolio ? (
+                      <div className="mb-2">
+                        <p>Portfolio</p>
+                        <embed
+                          src={seller.portfolio}
+                          type="application/pdf"
+                          className="w-30 h-60"
+                        />
+                      </div>
+                    ) : null}
+                  </div>
+                </div>
               </div>
-              {seller.resume ? (
-                <>
-                  <div>
-                    <p>Your Resume</p>
-                    <embed
-                      src={seller.resume}
-                      type="application/pdf"
-                      className="w-30 h-60"
-                    />
-                  </div>
-                </>
-              ) : null}
-              {seller.portfolio ? (
-                <>
-                  <div>
-                    <p> Portfolio</p>
-                    <embed
-                      src={seller.porfolio}
-                      type="application/pdf"
-                      className="w-30 h-60"
-                    />
-                  </div>
-                </>
-              ) : null}
-              {seller.status === "approved" && userrole === "seller" ? (
+
+              {seller.status === "approved" ? (
                 <>
                   {seller.resume ? (
                     <>
@@ -393,7 +446,7 @@ function UpdateSeller() {
                     </>
                   )}
 
-                  {seller.portfolio && userrole === "seller" ? (
+                  {seller.portfolio ? (
                     <>
                       <label htmlFor="portfolio" className="block mb-2">
                         Update your Portfolio
@@ -406,12 +459,12 @@ function UpdateSeller() {
                     </>
                   ) : (
                     <>
-                      <label htmlFor="porfolio" className="block mb-2">
-                        Add Porfolio
+                      <label htmlFor="portfolio" className="block mb-2">
+                        Add Portfolio
                       </label>
                       <input
                         type="file"
-                        name="porfolio"
+                        name="portfolio"
                         onChange={handleInput}
                         required
                       />
@@ -423,15 +476,20 @@ function UpdateSeller() {
           )}
           {userrole === "seller" ? (
             <>
-              <label htmlFor="email">Email Address:</label>
+              <label htmlFor="email" className="block mb-2">
+                Email Address:
+              </label>
               <input
                 type="email"
                 onChange={handleInput}
                 value={data.email}
                 name="email"
                 required
+                className="border border-gray-300 p-2 mb-2 focus:outline-none focus:border-blue-500"
               />
-              <label htmlFor="phone">Phone:</label>
+              <label htmlFor="phone" className="block mb-2">
+                Phone:
+              </label>
               <input
                 type="number"
                 onChange={handleInput}
@@ -439,9 +497,12 @@ function UpdateSeller() {
                 name="phone"
                 autoComplete="phone"
                 required
+                className="border border-gray-300 p-2 mb-2 focus:outline-none focus:border-blue-500"
               />
 
-              <label htmlFor="password">Old Password or Reset Password:</label>
+              <label htmlFor="password" className="block mb-2">
+                Old Password or Reset Password:
+              </label>
               <input
                 type="password"
                 onChange={handleInput}
@@ -449,16 +510,20 @@ function UpdateSeller() {
                 value={data.password}
                 autoComplete="new-password"
                 required
+                className="border border-gray-300 p-2 mb-2 focus:outline-none focus:border-blue-500"
               />
-              <label htmlFor="cpassword">Confirm password:</label>
+              <label htmlFor="cpassword" className="block mb-2">
+                Confirm password:
+              </label>
               <input
                 type="password"
                 onChange={handleInput}
                 name="cpassword"
                 autoComplete="off"
                 required
+                className="border border-gray-300 p-2 mb-2 focus:outline-none focus:border-blue-500"
               />
-              <button type="submit">
+              <button type="submit" className="text-red-500 mb-2">
                 <Link
                   to={`/seller/delete/${seller.user._id}?first_name=${seller.user.first_name}`}
                   className="text-red-500"
@@ -467,7 +532,12 @@ function UpdateSeller() {
                 </Link>
               </button>
               <p>{error}</p>
-              <button type="submit">Update your profile</button>
+              <button
+                type="submit"
+                className="bg-blue-500 text-white py-2 px-4 rounded"
+              >
+                Update your profile
+              </button>
             </>
           ) : null}
         </form>

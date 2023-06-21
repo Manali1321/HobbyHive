@@ -22,14 +22,24 @@ function DeleteService() {
   }
   return (
     <main>
-      <form>
-        <label>Do you want to Delete {name} Service?</label>
-        <button type="button" onClick={() => confirmation(true)}>
-          Yes
-        </button>
-        <button type="button" onClick={() => confirmation(false)}>
-          No
-        </button>
+      <form class="max-w-md mx-auto p-4 bg-white rounded-lg shadow-lg">
+        <label class="block mb-4">Do you want to Delete {name} Service?</label>
+        <div class="flex justify-center">
+          <button
+            type="button"
+            onClick={() => confirmation(true)}
+            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2"
+          >
+            Yes
+          </button>
+          <button
+            type="button"
+            onClick={() => confirmation(false)}
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            No
+          </button>
+        </div>
       </form>
     </main>
   );

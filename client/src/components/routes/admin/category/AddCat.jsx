@@ -25,13 +25,25 @@ function AddCat() {
     navigate("/admin/category");
   };
   return (
-    <main>
-      <div>
-        <p>Add New Category</p>
-        <form onSubmit={handleSubmit}>
-          <label htmlFor="name">Name of Category:</label>
-          <input type="text" name="name" onChange={handleInput}></input>
-          <button type="submit">Submit</button>
+    <main className="p-8">
+      <div className="bg-gray-100 p-4">
+        <p className="text-xl font-bold mb-4">Add New Category</p>
+        <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
+          <label htmlFor="name" className="text-lg">
+            Name of Category:
+          </label>
+          <input
+            type="text"
+            name="name"
+            onChange={handleInput}
+            className="border border-gray-300 p-2"
+          />
+          <button
+            type="submit"
+            className="bg-blue-500 text-white px-4 py-2 rounded"
+          >
+            Submit
+          </button>
         </form>
       </div>
     </main>

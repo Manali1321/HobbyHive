@@ -79,40 +79,72 @@ function UpdateService() {
   };
   return (
     <main>
-      <p>Update Service</p>
-      {service.image && (
-        <img src={service.image} width={200} alt="image of service" />
-      )}
-      <form onSubmit={handleSubmit}>
-        <div key={service._id}>
-          <label htmlFor="name">Add Name of Service</label>
-          <input
-            type="text"
-            name="name"
-            value={service.name}
-            onChange={handleInput}
+      <div class="max-w-md mx-auto p-4 bg-white rounded-lg shadow-lg">
+        <p class="text-2xl font-bold m-4 text-center">Update Service</p>
+        {service.image && (
+          <img
+            src={service.image}
+            width={200}
+            alt="image of service"
+            class="mb-4"
           />
-
-          <label htmlFor="image">Edit Image</label>
-          <input type="file" name="image" onChange={handleInput} />
-          <label htmlFor="category">Category</label>
-          <select
-            value={service.category}
-            name="category"
-            id="category"
-            onChange={handleInput}
-          >
-            <option value="">select value</option>
-            {category &&
-              category.map((c) => (
-                <option value={c._id} key={c._id}>
-                  {c.name}
-                </option>
-              ))}
-          </select>
-          <button type="submit">Submit</button>
-        </div>
-      </form>
+        )}
+        <form onSubmit={handleSubmit} class="space-y-4">
+          <div key={service._id}>
+            <div>
+              <label htmlFor="name" class="block mb-2">
+                Add Name of Service
+              </label>
+              <input
+                type="text"
+                name="name"
+                value={service.name}
+                onChange={handleInput}
+                class="block w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            <div>
+              <label htmlFor="image" class="block mb-2">
+                Edit Image
+              </label>
+              <input
+                type="file"
+                name="image"
+                onChange={handleInput}
+                class="block"
+              />
+            </div>
+            <div>
+              <label htmlFor="category" class="block mb-2">
+                Category
+              </label>
+              <select
+                value={service.category}
+                name="category"
+                id="category"
+                onChange={handleInput}
+                class="block w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">select value</option>
+                {category &&
+                  category.map((c) => (
+                    <option value={c._id} key={c._id}>
+                      {c.name}
+                    </option>
+                  ))}
+              </select>
+            </div>
+            <div>
+              <button
+                type="submit"
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
     </main>
   );
 }

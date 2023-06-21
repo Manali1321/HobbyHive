@@ -24,6 +24,8 @@ function DeleteSeller() {
       } catch (err) {
         console.error(err);
       }
+    } else if (value === false) {
+      navigate("/admin/seller");
     }
   };
   return (

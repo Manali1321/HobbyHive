@@ -17,16 +17,26 @@ function DeleteBuyer() {
     navigate("/admin/employer");
   }
   return (
-    <form>
-      <label>Do you want to Delete {name}'s Account?</label>
-      <br></br>
-      <button type="button" onClick={() => confirmation(true)}>
-        Yes
-      </button>
-      <button type="button" onClick={() => confirmation(false)}>
-        No
-      </button>
-    </form>
+    <main className="p-8">
+      <form className="space-y-4">
+        <label className="block">Do you want to Delete {name}'s Account?</label>
+        <br />
+        <button
+          type="button"
+          onClick={() => confirmation(true)}
+          className="bg-blue-500 text-white px-4 py-2 rounded"
+        >
+          Yes
+        </button>
+        <button
+          type="button"
+          onClick={() => confirmation(false)}
+          className="bg-red-500 text-white px-4 py-2 rounded"
+        >
+          No
+        </button>
+      </form>
+    </main>
   );
 }
 export default DeleteBuyer;

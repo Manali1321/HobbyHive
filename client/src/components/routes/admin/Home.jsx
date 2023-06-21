@@ -27,7 +27,7 @@ class Admin_home extends React.Component {
             className="flex flex-col items-center mx-4 mb-4 p-8 bg-white rounded-lg shadow-md"
           >
             <h2 className="text-2xl font-bold text-blue-500 hover:underline">
-              Admin List
+              Admin Data
             </h2>
           </Link>
           <Link
@@ -35,7 +35,7 @@ class Admin_home extends React.Component {
             className="flex flex-col items-center mx-4 mb-4 p-8 bg-white rounded-lg shadow-md"
           >
             <h2 className="text-2xl font-bold text-blue-500 hover:underline">
-              Admin
+              Seller Request
             </h2>
           </Link>
           <Link

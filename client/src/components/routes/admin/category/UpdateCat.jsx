@@ -40,20 +40,28 @@ function UpdateCat() {
     navigate("/admin/category/");
   };
   return (
-    <main>
-      <p>Update Category</p>
+    <main className="p-8">
+      <p className="text-xl font-bold">Update Category</p>
       <div>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div key={update._id}>
-            <label htmlFor="category">Name of Category:</label>
+            <label htmlFor="category" className="text-lg">
+              Name of Category:
+            </label>
             <input
               type="text"
               name="category"
               onChange={handleInput}
               value={update.name}
+              className="border border-gray-300 p-2"
             />
           </div>
-          <button type="submit">Submit</button>
+          <button
+            type="submit"
+            className="bg-blue-500 text-white px-4 py-2 rounded"
+          >
+            Submit
+          </button>
         </form>
       </div>
     </main>
