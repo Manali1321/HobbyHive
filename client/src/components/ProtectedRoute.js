@@ -8,7 +8,7 @@ const ProtectedRoute = ({ allowedRoles, children }) => {
   const { user, userrole } = useUserAuth();
   const { selectedId } = useContext(SelectionContext);
   useEffect(() => {
-    if (user && userrole === "admin") {
+    if (!user && !userrole === "admin") {
       navigate(`/admin`);
     } else if (user && selectedId && userrole === "buyer") {
       navigate(`/buyer/seller/${selectedId}`);
