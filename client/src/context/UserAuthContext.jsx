@@ -4,49 +4,89 @@ import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
-  updateProfile,
+  deleteUser,
 } from "firebase/auth";
 import { auth } from "../firebase";
+import { api } from "../utils/axios";
 
 const userAuthContext = createContext();
 
 export function UserAuthContextProvider({ allowedRoles, children }) {
-  const [user, setUser] = useState("");
+  const [user, setUser] = useState(null);
+  const [userrole, setUserrole] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   async function signUp(email, password) {
     return createUserWithEmailAndPassword(auth, email, password);
   }
+
   async function logIn(email, password, role) {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      setUser({ ...user, role: role });
-      if (allowedRoles && !allowedRoles.includes(user.role)) {
-        return console.log("Not allow");
+      const res = await signInWithEmailAndPassword(auth, email, password);
+      setUser(res.user);
+      setUserrole(role);
+      console.log(role);
+      const resemail = res.user.email;
+
+      return resemail;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async function deleteUserAccount() {
+    try {
+      if (user && userrole !== "Admin") {
+        await deleteUser(user); // Delete the user account
+        logOut(); // Log out the user after successful deletion
       }
-      return children;
     } catch (error) {
       console.log(error);
     }
   }
 
-  function logOut() {
-    return signOut(auth);
+  async function logOut() {
+    await signOut(auth);
+    setUser(null);
   }
-  // console.log(user);
-
+  const getRole = async () => {
+    if (user !== null) {
+      const response = await api.post("/seller/signin", { email: user.email });
+      console.log("user role");
+      console.log(response.data);
+      const currentRole = response.data.role;
+      setUserrole(currentRole);
+    }
+  };
+  useEffect(() => {
+    getRole();
+  }, [user]);
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
+      setIsLoading(false);
+
+      // Set loading state to false after user data is fetched
     });
+
     return () => {
       unsubscribe();
     };
   }, []);
+
+  // If loading, display a loading indicator
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  // Return the user auth context provider with the user data
   return (
-    <userAuthContext.Provider value={{ user, signUp, logIn, logOut }}>
+    <userAuthContext.Provider
+      value={{ user, signUp, logIn, logOut, userrole, deleteUserAccount }}
+    >
       {children}
     </userAuthContext.Provider>
   );
 }
+
 export function useUserAuth() {
   return useContext(userAuthContext);
 }

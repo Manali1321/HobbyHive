@@ -1,5 +1,5 @@
 const express = require('express');
-const { User, Buyer } = require('../schema');
+const { User, Buyer, Seller } = require('../schema');
 
 const buyerRoutes = express.Router();
 
@@ -76,6 +76,16 @@ buyerRoutes.put("/update/:id", async (req, res) => {
 
   } catch (error) {
     console.log("update put Category error" + error);
+  }
+});
+buyerRoutes.get("/seller/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const results = await Seller.find({ service: id }).populate('user').populate('service').exec();
+    console.log(results);
+    res.send(results);
+  } catch (error) {
+    console.log('Error in get pending seller routes' + error);
   }
 });
 

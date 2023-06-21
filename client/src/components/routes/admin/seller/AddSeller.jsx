@@ -110,6 +110,11 @@ function AddSeller() {
         ...prevdata,
         password: e.target.value,
       }));
+      if (e.target.value.length < 6) {
+        setError("Password must be at least 6 characters");
+      } else {
+        setError("");
+      }
     } else if (name === "cpassword") {
       setCpassword(e.target.value);
     }
@@ -189,7 +194,7 @@ function AddSeller() {
         />
 
         <label htmlFor="service" className="block mb-2">
-          Which service you want to provide:
+          Which service do you want to provide:
         </label>
         <select
           name="service"
@@ -228,7 +233,7 @@ function AddSeller() {
           required
         />
         <label htmlFor="workpermit" className="block mb-2">
-          Add your workpermit
+          Add your work permit
         </label>
         <input
           type="file"

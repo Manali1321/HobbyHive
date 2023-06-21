@@ -1,12 +1,12 @@
 import React, { useState, useContext, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { api } from "../../../../utils/axios";
 import { ServiceContext } from "../../../../context/ServiceContext";
+import { AiFillDelete } from "react-icons/ai";
 function UpdateSeller() {
   const navigate = useNavigate();
   const { id } = useParams();
   const { service } = useContext(ServiceContext);
-
   const [seller, setSeller] = useState();
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
@@ -469,6 +469,14 @@ function UpdateSeller() {
             autoComplete="off"
             required
           />
+          <button type="submit">
+            <Link
+              to={`/seller/delete/${seller.user._id}?first_name=${seller.user.first_name}`}
+              className="text-red-500"
+            >
+              <AiFillDelete /> Delete your account
+            </Link>
+          </button>
           <p>{error}</p>
           <button type="submit">Update your profile</button>
         </form>

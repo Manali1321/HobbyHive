@@ -16,6 +16,11 @@ function SellerLogin() {
   };
   const handlePasswordChange = (e) => {
     setPass(e.target.value);
+    if (e.target.value.length < 6) {
+      setError("Password must be at least 6 characters");
+    } else {
+      setError("");
+    }
   };
 
   // async function check() {
@@ -41,13 +46,11 @@ function SellerLogin() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // await check();
-    setError("");
     try {
-      await logIn(email, password, "seller");
-      const response = await api.post("/seller/signin", { email, password });
+      const response = await api.post("/seller/signin", { email });
       console.log(response.data);
       const userId = response.data._id;
+      const res = await logIn(email, password, response.data.role);
       navigate(`/seller/update/${userId}`);
     } catch (err) {
       setError(err.message);
@@ -56,7 +59,9 @@ function SellerLogin() {
   return (
     <main className="flex flex-col items-center justify-center h-screen bg-gray-100">
       <p className="text-2xl font-bold mb-4">Seller log in</p>
-      {error && <p>{error}</p>}
+      {error && (
+        <p className="bg-red-100 text-red-600 p-3 mb-4 rounded-md">{error}</p>
+      )}
       <form
         onSubmit={handleSubmit}
         className="max-w-md bg-white rounded-md shadow-md p-6"
@@ -103,8 +108,8 @@ function SellerLogin() {
       </form>
 
       <div className="mt-4">
-        <p>Don't Have an Account yet?</p>
-        <Link to="/seller/add" className="mt-2">
+        <p className="mb-2">Don't Have an Account yet?</p>
+        <Link to="/seller/add">
           <button
             type="submit"
             className="px-4 py-2 bg-blue-500 text-white font-bold rounded-md hover:bg-blue-600"

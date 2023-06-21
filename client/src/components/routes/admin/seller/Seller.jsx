@@ -6,18 +6,10 @@ import { useUserAuth } from "../../../../context/UserAuthContext";
 
 function Seller() {
   const [seller, setSeller] = useState([]);
-  let { user, logOut } = useUserAuth();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   // console.log(user);
   // console.log(seller);
-  const handleLogout = async () => {
-    try {
-      await logOut();
-      navigate("/login");
-    } catch (error) {
-      console.log(error);
-    }
-  };
+
   useEffect(() => {
     api.get("/admin/seller").then(function (response) {
       setSeller(() => response.data);
@@ -25,10 +17,6 @@ function Seller() {
   }, []);
   return (
     <main>
-      <p>Welcome {user && user.email}</p>
-      <button type="submit" onClick={handleLogout}>
-        Logout
-      </button>
       <table className="table-auto w-full">
         <thead>
           <tr>

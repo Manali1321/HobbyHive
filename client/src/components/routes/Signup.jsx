@@ -50,6 +50,11 @@ function AddEmployer() {
         ...prevdata,
         password: e.target.value,
       }));
+      if (e.target.value.length < 6) {
+        setError("Password must be at least 6 characters");
+      } else {
+        setError("");
+      }
     } else if (name === "cpassword") {
       setCpassword(e.target.value);
     }
@@ -75,7 +80,7 @@ function AddEmployer() {
   }
   return (
     <main className="flex flex-col items-center justify-center h-screen bg-gray-100">
-      <p className="text-2xl font-bold mb-4">Sign Up</p>
+      <p className="text-2xl font-bold mb-4">User Sign Up</p>
       <form
         onSubmit={handleSubmit}
         className="max-w-md bg-white rounded-md shadow-md p-6"

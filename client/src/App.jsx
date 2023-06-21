@@ -5,43 +5,41 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 // Browswer Route
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-
-// Landing page
-import Home from "./components/routes/Home";
 import ProtectedRoute from "./components/ProtectedRoute";
+
+// ////////////******user
+import Home from "./components/routes/Home";
+import Login from "./components/routes/Login";
+import AddEmployer from "./components/routes/Signup";
+import AddSeller from "./components/routes/admin/seller/AddSeller";
+import SellerLogin from "./components/routes/SellerLogin";
+import SellerHome from "./components/routes/SellerHome";
+import BuyerSearch from "./components/routes/admin/buyer/BuyerResult";
+// ////////////******seller
+import UpdateSeller from "./components/routes/admin/seller/UpdateSeller";
+import DeleteSeller from "./components/routes/admin/seller/DeleteSeller";
+
+// ////////////******buyer
+import DeleteBuyer from "./components/routes/admin/buyer/DeleteBuyer";
+import UpdateBuyer from "./components/routes/admin/buyer/UpdateBuyer";
 
 // ////////////******Admin
 import Admin_home from "./components/routes/admin/Home";
-import Seller from "./components/routes/admin/seller/Seller";
+import AdminDetail from "./components/routes/admin/AdminList";
 import SellerApproval from "./components/routes/admin/Admin";
-
-import AddSeller from "./components/routes/admin/seller/AddSeller";
-import UpdateSeller from "./components/routes/admin/seller/UpdateSeller";
-
-import DeleteSeller from "./components/routes/admin/seller/DeleteSeller";
-
-// Seller
-import SellerHome from "./components/routes/SellerHome";
-import SellerLogin from "./components/routes/SellerLogin";
-
+import Seller from "./components/routes/admin/seller/Seller";
+import Employer from "./components/routes/admin/buyer/Buyer";
 // Service
 import Service from "./components/routes/admin/service/Service";
 import AddService from "./components/routes/admin/service/AddService";
 import DeleteService from "./components/routes/admin/service/DeleteService";
 import UpdateService from "./components/routes/admin/service/UpdateService";
-
 // Category
 import Category from "./components/routes/admin/category/Category";
 import AddCat from "./components/routes/admin/category/AddCat";
 import UpdateCat from "./components/routes/admin/category/UpdateCat";
 import DeleteCat from "./components/routes/admin/category/DeleteCat";
 
-// Employer
-import Login from "./components/routes/Login";
-import DeleteBuyer from "./components/routes/admin/buyer/DeleteBuyer";
-import UpdateBuyer from "./components/routes/admin/buyer/UpdateBuyer";
-import Employer from "./components/routes/admin/buyer/Buyer";
-import AddEmployer from "./components/routes/Signup";
 function App() {
   return (
     <div>
@@ -62,12 +60,19 @@ function App() {
           <Route path="/update/:id" element={<UpdateBuyer />} />
 
           {/* Admin */}
-          <Route path="/admin" element={<Admin_home />} />
+          <Route
+            path="/admin"
+            element={
+              // <ProtectedRoute allowedRoles={["admin"]}>
+              <Admin_home />
+              // </ProtectedRoute>
+            }
+          />
           {/* Seller */}
           <Route
             path="/admin/seller"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["admin", "buyer"]}>
                 <Seller />
               </ProtectedRoute>
             }
@@ -79,7 +84,7 @@ function App() {
           <Route
             path="/seller/update/:id"
             element={
-              // <ProtectedRoute allowedRoles={["seller"]}>
+              // <ProtectedRoute allowedRoles={["admin", "admin"]}>
               <UpdateSeller />
               // </ProtectedRoute>
             }
@@ -89,10 +94,12 @@ function App() {
 
           {/* Employer */}
           <Route path="/admin/employer" element={<Employer />} />
+          <Route path="/buyer/seller/:id" element={<BuyerSearch />} />
 
           {/* Category */}
           <Route path="/admin/category" element={<Category />} />
           <Route path="/admin/seller-approval" element={<SellerApproval />} />
+          <Route path="/admin/list" element={<AdminDetail />} />
 
           <Route path="/admin/category/add" element={<AddCat />} />
           <Route path="/admin/category/update/:id" element={<UpdateCat />} />

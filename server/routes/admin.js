@@ -28,4 +28,44 @@ adminRoutes.get("/buyer", async (req, res) => {
     console.log('Error in get all buyer routes' + error);
   }
 });
+adminRoutes.get("/list", async (req, res) => {
+  try {
+    const results = await User.find({ role: "admin" }).exec();
+    res.send(results);
+
+  } catch (error) {
+    console.log('Error in admin to find admin routes' + error);
+  }
+});
+adminRoutes.post('/add', async (req, res) => {
+  try {
+    // console.log(req.body)
+    const { email } = req.body;
+
+    // save user information in mongodb
+    const user = await User.findOne({
+      email
+    })
+
+    console.log(user)
+    res.json(user)
+
+  } catch (error) {
+    console.log("🚀" + error)
+  }
+})
+adminRoutes.put("/update/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const { first_name, last_name, email, phone, password } = req.body;
+    var user = await User.updateOne({ _id: id }, {
+      first_name, last_name, email, phone, password, role: "admin"
+    });
+    console.log({ user });
+    res.send({ user })
+
+  } catch (error) {
+    console.log("update put Category error" + error);
+  }
+});
 module.exports = adminRoutes;

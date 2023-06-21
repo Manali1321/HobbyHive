@@ -77,18 +77,9 @@ sellerRoutes.put("/update/:id", async (req, res) => {
 });
 sellerRoutes.post('/signin', async (req, res) => {
   try {
-    const { email, password } = req.body;
-    console.log(email, password)
+    const { email } = req.body;
     const user = await User.findOne({ email });
-
-    if (user && user.password === password) {
-      // Authentication successful
-      // console.log(user)
-      return res.json(user);
-    } else {
-      // Authentication failed
-      return res.status(401).json({ error: 'Invalid credentials' });
-    }
+    res.json(user);
   } catch (error) {
     // Handle any errors that occurred during the authentication process
     console.log(error);
