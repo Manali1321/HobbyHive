@@ -474,72 +474,71 @@ function UpdateSeller() {
               ) : null}
             </>
           )}
-          {userrole === "seller" ? (
-            <>
-              <label htmlFor="email" className="block mb-2">
-                Email Address:
-              </label>
-              <input
-                type="email"
-                onChange={handleInput}
-                value={data.email}
-                name="email"
-                required
-                className="border border-gray-300 p-2 mb-2 focus:outline-none focus:border-blue-500"
-              />
-              <label htmlFor="phone" className="block mb-2">
-                Phone:
-              </label>
-              <input
-                type="number"
-                onChange={handleInput}
-                value={data.phone}
-                name="phone"
-                autoComplete="phone"
-                required
-                className="border border-gray-300 p-2 mb-2 focus:outline-none focus:border-blue-500"
-              />
+          <>
+            <label htmlFor="email" className="block mb-2">
+              Email Address:
+            </label>
+            <input
+              type="email"
+              onChange={handleInput}
+              value={data.email}
+              name="email"
+              required
+              className="border border-gray-300 p-2 mb-2 focus:outline-none focus:border-blue-500"
+            />
+            <label htmlFor="phone" className="block mb-2">
+              Phone:
+            </label>
+            <input
+              type="number"
+              onChange={handleInput}
+              value={data.phone}
+              name="phone"
+              autoComplete="phone"
+              required
+              className="border border-gray-300 p-2 mb-2 focus:outline-none focus:border-blue-500"
+            />
 
-              <label htmlFor="password" className="block mb-2">
-                Old Password or Reset Password:
-              </label>
-              <input
-                type="password"
-                onChange={handleInput}
-                name="password"
-                value={data.password}
-                autoComplete="new-password"
-                required
-                className="border border-gray-300 p-2 mb-2 focus:outline-none focus:border-blue-500"
-              />
-              <label htmlFor="cpassword" className="block mb-2">
-                Confirm password:
-              </label>
-              <input
-                type="password"
-                onChange={handleInput}
-                name="cpassword"
-                autoComplete="off"
-                required
-                className="border border-gray-300 p-2 mb-2 focus:outline-none focus:border-blue-500"
-              />
-              <button type="submit" className="text-red-500 mb-2">
-                <Link
-                  to={`/seller/delete/${seller.user._id}?first_name=${seller.user.first_name}`}
-                  className="text-red-500"
-                >
-                  <AiFillDelete /> Delete your account
-                </Link>
-              </button>
-              <p>{error}</p>
-              <button
-                type="submit"
-                className="bg-blue-500 text-white py-2 px-4 rounded"
+            <label htmlFor="password" className="block mb-2">
+              Old Password or Reset Password:
+            </label>
+            <input
+              type="password"
+              onChange={handleInput}
+              name="password"
+              value={data.password}
+              autoComplete="new-password"
+              required
+              className="border border-gray-300 p-2 mb-2 focus:outline-none focus:border-blue-500"
+            />
+            <label htmlFor="cpassword" className="block mb-2">
+              Confirm password:
+            </label>
+            <input
+              type="password"
+              onChange={handleInput}
+              name="cpassword"
+              autoComplete="off"
+              required
+              className="border border-gray-300 p-2 mb-2 focus:outline-none focus:border-blue-500"
+            />
+            <button type="submit" className="text-red-500 mb-2">
+              <Link
+                to={`/seller/delete/${seller.user._id}?first_name=${seller.user.first_name}`}
+                className="text-red-500"
               >
-                Update your profile
-              </button>
-            </>
-          ) : null}
+                <AiFillDelete /> Delete your account
+              </Link>
+            </button>
+            <p>{error}</p>
+            <button
+              type="submit"
+              className="bg-blue-500 text-white py-2 px-4 rounded"
+            >
+              Update your profile
+            </button>
+          </>
+          {/* ) : null} */}
         </form>
       )}
     </main>
