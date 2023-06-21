@@ -28,7 +28,7 @@ function Login() {
     event.preventDefault();
     setError("");
     try {
-      const see = await logIn(email, password, "buyer");
+      const see = await logIn(email, password);
       if (selectedId) {
         navigate(`/buyer/seller/${selectedId}`);
       } else {
@@ -42,6 +42,8 @@ function Login() {
   return (
     <main className="flex flex-col items-center justify-center h-screen bg-gray-100">
       {error && <p className="text-red-600">{error}</p>}
+      <p className="text-2xl font-bold mb-4">Log in</p>
+
       <form
         onSubmit={handleSubmit}
         className="max-w-md bg-white rounded-md shadow-md p-6 space-y-4"

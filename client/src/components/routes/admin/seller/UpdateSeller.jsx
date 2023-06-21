@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { api } from "../../../../utils/axios";
 import { ServiceContext } from "../../../../context/ServiceContext";
 import { AiFillDelete } from "react-icons/ai";
+import { useUserAuth } from "../../../../context/UserAuthContext";
 function UpdateSeller() {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -10,10 +11,9 @@ function UpdateSeller() {
   const [seller, setSeller] = useState();
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
-
+  const { userrole } = useUserAuth();
   useEffect(() => {
     api.get(`seller/${id}`).then(function (res) {
-      // console.log(res.data);
       setSeller(() => res.data);
       setData(() => ({
         first_name: res.data.user ? res.data.user.first_name : "",
@@ -255,7 +255,7 @@ function UpdateSeller() {
         <p>Loading...</p>
       ) : (
         <form onSubmit={handleSubmit}>
-          {seller.status === "rejected" ? (
+          {userrole === "seller" && seller.status === "rejected" ? (
             <>
               <label htmlFor="first_name">First Name:</label>
               <input
@@ -342,54 +342,10 @@ function UpdateSeller() {
                 name="email"
                 disabled="disabled"
               />
-              <label htmlFor="business_number">Business Number:</label>
-              <input
-                type="text"
-                value={data.business_number}
-                name="business_number"
-                disabled="disabled"
-              />
               <div>
-                <p>Your Profile:</p>
+                <p>Profile:</p>
                 <img src={seller.seller_image} width={100} />
               </div>
-              <div>
-                <p>Your Workpermit</p>
-                <embed
-                  src={seller.workpermit}
-                  type="application/pdf"
-                  className="w-32 h-40"
-                />
-              </div>
-              <div>
-                <p>Your SIN</p>
-                <embed
-                  src={seller.sin}
-                  type="application/pdf"
-                  className="w-30 h-60"
-                />
-              </div>
-            </>
-          )}
-          <label htmlFor="email">Email Address:</label>
-          <input
-            type="email"
-            onChange={handleInput}
-            value={data.email}
-            name="email"
-            required
-          />
-          <label htmlFor="phone">Phone:</label>
-          <input
-            type="number"
-            onChange={handleInput}
-            value={data.phone}
-            name="phone"
-            autoComplete="phone"
-            required
-          />
-          {seller.status === "approved" ? (
-            <>
               {seller.resume ? (
                 <>
                   <div>
@@ -400,85 +356,120 @@ function UpdateSeller() {
                       className="w-30 h-60"
                     />
                   </div>
-
-                  <label htmlFor="resume" className="block mb-2">
-                    Update your Resume
-                  </label>
-                  <input type="file" name="resume" onChange={handleInput} />
                 </>
-              ) : (
-                <>
-                  <label htmlFor="resume" className="block mb-2">
-                    Add Resume
-                  </label>
-                  <input
-                    type="file"
-                    name="resume"
-                    onChange={handleInput}
-                    required
-                  />
-                </>
-              )}
-
+              ) : null}
               {seller.portfolio ? (
                 <>
                   <div>
-                    <p>Your Portfolio</p>
+                    <p> Portfolio</p>
                     <embed
                       src={seller.porfolio}
                       type="application/pdf"
                       className="w-30 h-60"
                     />
                   </div>
-
-                  <label htmlFor="portfolio" className="block mb-2">
-                    Update your Portfolio
-                  </label>
-                  <input type="file" name="portfolio" onChange={handleInput} />
                 </>
-              ) : (
+              ) : null}
+              {seller.status === "approved" && userrole === "seller" ? (
                 <>
-                  <label htmlFor="porfolio" className="block mb-2">
-                    Add Porfolio
-                  </label>
-                  <input
-                    type="file"
-                    name="porfolio"
-                    onChange={handleInput}
-                    required
-                  />
+                  {seller.resume ? (
+                    <>
+                      <label htmlFor="resume" className="block mb-2">
+                        Update your Resume
+                      </label>
+                      <input type="file" name="resume" onChange={handleInput} />
+                    </>
+                  ) : (
+                    <>
+                      <label htmlFor="resume" className="block mb-2">
+                        Add Resume
+                      </label>
+                      <input
+                        type="file"
+                        name="resume"
+                        onChange={handleInput}
+                        required
+                      />
+                    </>
+                  )}
+
+                  {seller.portfolio && userrole === "seller" ? (
+                    <>
+                      <label htmlFor="portfolio" className="block mb-2">
+                        Update your Portfolio
+                      </label>
+                      <input
+                        type="file"
+                        name="portfolio"
+                        onChange={handleInput}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <label htmlFor="porfolio" className="block mb-2">
+                        Add Porfolio
+                      </label>
+                      <input
+                        type="file"
+                        name="porfolio"
+                        onChange={handleInput}
+                        required
+                      />
+                    </>
+                  )}
                 </>
-              )}
+              ) : null}
+            </>
+          )}
+          {userrole === "seller" ? (
+            <>
+              <label htmlFor="email">Email Address:</label>
+              <input
+                type="email"
+                onChange={handleInput}
+                value={data.email}
+                name="email"
+                required
+              />
+              <label htmlFor="phone">Phone:</label>
+              <input
+                type="number"
+                onChange={handleInput}
+                value={data.phone}
+                name="phone"
+                autoComplete="phone"
+                required
+              />
+
+              <label htmlFor="password">Old Password or Reset Password:</label>
+              <input
+                type="password"
+                onChange={handleInput}
+                name="password"
+                value={data.password}
+                autoComplete="new-password"
+                required
+              />
+              <label htmlFor="cpassword">Confirm password:</label>
+              <input
+                type="password"
+                onChange={handleInput}
+                name="cpassword"
+                autoComplete="off"
+                required
+              />
+              <button type="submit">
+                <Link
+                  to={`/seller/delete/${seller.user._id}?first_name=${seller.user.first_name}`}
+                  className="text-red-500"
+                >
+                  <AiFillDelete /> Delete your account
+                </Link>
+              </button>
+              <p>{error}</p>
+              <button type="submit">Update your profile</button>
             </>
           ) : null}
-
-          <label htmlFor="password">Old Password or Reset Password:</label>
-          <input
-            type="password"
-            onChange={handleInput}
-            name="password"
-            value={data.password}
-            autoComplete="new-password"
-            required
-          />
-          <label htmlFor="cpassword">Confirm password:</label>
-          <input
-            type="password"
-            onChange={handleInput}
-            name="cpassword"
-            autoComplete="off"
-            required
-          />
-          <button type="submit">
-            <Link
-              to={`/seller/delete/${seller.user._id}?first_name=${seller.user.first_name}`}
-              className="text-red-500"
-            >
-              <AiFillDelete /> Delete your account
-            </Link>
-          </button>
-          <p>{error}</p>
-          <button type="submit">Update your profile</button>
         </form>
       )}
     </main>

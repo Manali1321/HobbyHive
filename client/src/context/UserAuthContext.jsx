@@ -11,7 +11,7 @@ import { api } from "../utils/axios";
 
 const userAuthContext = createContext();
 
-export function UserAuthContextProvider({ allowedRoles, children }) {
+export function UserAuthContextProvider({ children }) {
   const [user, setUser] = useState(null);
   const [userrole, setUserrole] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -24,7 +24,6 @@ export function UserAuthContextProvider({ allowedRoles, children }) {
       const res = await signInWithEmailAndPassword(auth, email, password);
       setUser(res.user);
       setUserrole(role);
-      console.log(role);
       const resemail = res.user.email;
 
       return resemail;
@@ -50,8 +49,6 @@ export function UserAuthContextProvider({ allowedRoles, children }) {
   const getRole = async () => {
     if (user !== null) {
       const response = await api.post("/seller/signin", { email: user.email });
-      console.log("user role");
-      console.log(response.data);
       const currentRole = response.data.role;
       setUserrole(currentRole);
     }
@@ -59,6 +56,7 @@ export function UserAuthContextProvider({ allowedRoles, children }) {
   useEffect(() => {
     getRole();
   }, [user]);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);

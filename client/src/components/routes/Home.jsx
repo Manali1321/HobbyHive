@@ -11,14 +11,12 @@ function Home() {
   const navigate = useNavigate();
   let { user } = useUserAuth();
   let { selectedId, setSelectedId } = useContext(SelectionContext);
-
   const handleClick = async (id) => {
     setSelectedId(id);
     if (!user) {
       navigate("/login");
-    } else if (user && selectedId) {
-      // console.log("in user");
-      navigate(``);
+    } else {
+      navigate(`/`);
     }
   };
 
@@ -84,7 +82,7 @@ function Home() {
                   service.map((s) => {
                     if (c._id === s.category) {
                       return (
-                        <Link to={`/buyer/seller/${s._id}`}>
+                        <Link to={`/buyer/seller/${s._id}?s=${s.name}`}>
                           <div
                             key={s._id}
                             className="flex-shrink-0 flex flex-col items-center justify-center mr-4 cursor-pointer bg-white rounded-lg shadow-md p-4"

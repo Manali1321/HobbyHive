@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { Link } from "react-router-dom";
 import { useUserAuth } from "../../context/UserAuthContext";
 import { api } from "../../utils/axios";
@@ -22,27 +21,6 @@ function SellerLogin() {
       setError("");
     }
   };
-
-  // async function check() {
-  //   if (!email || !password) {
-  //     return "<p>Missing<p>";
-  //   }
-  //   try {
-  //     const response = await axios.post("http://localhost:8888/seller/login", {
-  //       email,
-  //       password,
-  //     });
-  //     console.log(response);
-  //     if (response.data[0] === true) {
-  //       console.log("user is seller");
-  //     } else if (response.data === false) {
-  //       console.log("user is waiting");
-  //     }
-  //     navigate(`/seller/profile/${response.data[1]}`);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // }
 
   const handleSubmit = async (event) => {
     event.preventDefault();

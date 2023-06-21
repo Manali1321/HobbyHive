@@ -1,50 +1,57 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { api } from "../../../../utils/axios";
-import { SelectionContext } from "../../../../context/SelectionContext";
 
 function BuyerSearch() {
   const [seller, setSeller] = useState([]);
-  const { selectedId, fetchData, selectedData } = useContext(SelectionContext);
   const navigate = useNavigate();
   const { id } = useParams();
-  // const listData = async () => {
-  //   const resSeller = await api.get(`/buyer/seller/${id}`);
-  //   setSeller(resSeller.data);
-  //   console.log(resSeller.data);
-  // };
-  // const handleClick = async (id) => {
-  //   try {
-  //     navigate(`/seller/${id}`);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  const name = new URLSearchParams(location.search).get("s");
 
-  console.log(selectedData);
-  useEffect(() => {
-    if (selectedData) {
-      setSeller(selectedData);
+  const handleClick = async (d) => {
+    try {
+      navigate(`/seller/update/${d}`);
+    } catch (error) {
+      console.log(error);
     }
-  }, [selectedData]);
+  };
+
+  useEffect(() => {
+    const fetchSeller = async () => {
+      try {
+        const response = await api.get(`/buyer/seller/${id}`);
+        setSeller(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchSeller();
+  }, []);
   return (
     <main>
-      {seller.map((d) => (
-        <div onClick={handleClick(d.user._id)} key={d._id}>
-          <img src={d.seller_image} width={200} />
-          <h2>
-            {d.user.first_name}
-            <span>{d.user.last_name}</span>
-            <div
-              className={`px-4 py-2 ${
-                d.status === "approved" ? "bg-green-500" : "bg-red-500"
-              }`}
-            >
-              {d.status}
-            </div>
-          </h2>
-        </div>
-      ))}
+      <h2>Welcome to {name}</h2>
+      {seller &&
+        seller.map((d) => (
+          <div key={d._id} onClick={() => handleClick(d.user._id)}>
+            <>
+              <img src={d.seller_image} width={200} />
+              <h2>
+                {d.user.first_name}
+                <span>{d.user.last_name}</span>{" "}
+              </h2>
+
+              <div
+                className={`px-4 py-2 ${
+                  d.status === "approved" ? "bg-green-500" : "bg-red-500"
+                }`}
+              >
+                {d.status}
+              </div>
+            </>
+            //{" "}
+          </div>
+        ))}
     </main>
   );
 }

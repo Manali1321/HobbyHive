@@ -46,70 +46,168 @@ function App() {
       <BrowserRouter>
         <Header />
         <Routes>
+          {/* General path */}
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<AddEmployer />} />
-          <Route
-            path="/delete/:id"
-            element={
-              <ProtectedRoute>
-                <DeleteBuyer />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/update/:id" element={<UpdateBuyer />} />
-
-          {/* Admin */}
-          <Route
-            path="/admin"
-            element={
-              // <ProtectedRoute allowedRoles={["admin"]}>
-              <Admin_home />
-              // </ProtectedRoute>
-            }
-          />
-          {/* Seller */}
-          <Route
-            path="/admin/seller"
-            element={
-              <ProtectedRoute allowedRoles={["admin", "buyer"]}>
-                <Seller />
-              </ProtectedRoute>
-            }
-          />
           <Route path="/seller" element={<SellerHome />} />
           <Route path="/seller/login" element={<SellerLogin />} />
           <Route path="/seller/add" element={<AddSeller />} />
 
+          {/* Buyer stuff which can be done by admin */}
+          <Route
+            path="/delete/:id"
+            element={
+              <ProtectedRoute isAllowed={["admin", "buyer"]}>
+                <DeleteBuyer />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/update/:id"
+            element={
+              <ProtectedRoute isAllowed={["admin", "buyer"]}>
+                <UpdateBuyer />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/seller"
+            element={
+              <ProtectedRoute isAllowed={["admin"]}>
+                <Seller />
+              </ProtectedRoute>
+            }
+          />
+          {/* Employer */}
+          <Route
+            path="/buyer/seller/:id"
+            element={
+              <ProtectedRoute isAllowed={["buyer", "admin"]}>
+                <BuyerSearch />
+              </ProtectedRoute>
+            }
+          />
+          {/* Admin Access*/}
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute isAllowed={["admin"]}>
+                <Admin_home />
+              </ProtectedRoute>
+            }
+          />
+          {/* Seller */}
           <Route
             path="/seller/update/:id"
             element={
-              // <ProtectedRoute allowedRoles={["admin", "admin"]}>
-              <UpdateSeller />
-              // </ProtectedRoute>
+              <ProtectedRoute isAllowed={["admin", "seller", "buyer"]}>
+                <UpdateSeller />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/seller/delete/:id"
+            element={
+              <ProtectedRoute isAllowed={["admin", "seller"]}>
+                <DeleteSeller />
+              </ProtectedRoute>
             }
           />
 
-          <Route path="/seller/delete/:id" element={<DeleteSeller />} />
-
-          {/* Employer */}
-          <Route path="/admin/employer" element={<Employer />} />
-          <Route path="/buyer/seller/:id" element={<BuyerSearch />} />
+          <Route
+            path="/admin/employer"
+            element={
+              <ProtectedRoute isAllowed={["admin"]}>
+                <Employer />
+              </ProtectedRoute>
+            }
+          />
 
           {/* Category */}
-          <Route path="/admin/category" element={<Category />} />
-          <Route path="/admin/seller-approval" element={<SellerApproval />} />
-          <Route path="/admin/list" element={<AdminDetail />} />
+          <Route
+            path="/admin/category"
+            element={
+              <ProtectedRoute isAllowed={["admin"]}>
+                <Category />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/seller-approval"
+            element={
+              <ProtectedRoute isAllowed={["admin"]}>
+                <SellerApproval />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/list"
+            element={
+              <ProtectedRoute isAllowed={["admin"]}>
+                <AdminDetail />
+              </ProtectedRoute>
+            }
+          />
 
-          <Route path="/admin/category/add" element={<AddCat />} />
-          <Route path="/admin/category/update/:id" element={<UpdateCat />} />
-          <Route path="/admin/category/delete/:id" element={<DeleteCat />} />
+          <Route
+            path="/admin/category/add"
+            element={
+              <ProtectedRoute isAllowed={["admin"]}>
+                <AddCat />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/category/update/:id"
+            element={
+              <ProtectedRoute isAllowed={["admin"]}>
+                <UpdateCat />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/category/delete/:id"
+            element={
+              <ProtectedRoute isAllowed={["admin"]}>
+                <DeleteCat />
+              </ProtectedRoute>
+            }
+          />
 
           {/* Service */}
-          <Route path="/admin/service" element={<Service />} />
-          <Route path="/admin/service/add" element={<AddService />} />
-          <Route path="/admin/service/update/:id" element={<UpdateService />} />
-          <Route path="/admin/service/delete/:id" element={<DeleteService />} />
+          <Route
+            path="/admin/service"
+            element={
+              <ProtectedRoute isAllowed={["admin"]}>
+                <Service />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/service/add"
+            element={
+              <ProtectedRoute isAllowed={["admin"]}>
+                <AddService />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/service/update/:id"
+            element={
+              <ProtectedRoute isAllowed={["admin"]}>
+                <UpdateService />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/service/delete/:id"
+            element={
+              <ProtectedRoute isAllowed={["admin"]}>
+                <DeleteService />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
         <Footer />
       </BrowserRouter>

@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useUserAuth } from "../context/UserAuthContext";
 
 function Nav() {
-  const { user, logOut } = useUserAuth();
+  const { user, logOut, userrole } = useUserAuth();
   const navigate = useNavigate();
   const [shouldReload, setShouldReload] = useState(false);
 
@@ -23,10 +23,10 @@ function Nav() {
     }
   };
 
-  const handleLogin = async () => {
-    setShouldReload(true);
-    await navigate("/login");
-  };
+  // const handleLogin = async () => {
+  //   setShouldReload(true);
+  //   await navigate("/login");
+  // };
 
   return (
     <main>
@@ -36,14 +36,17 @@ function Nav() {
             Home
           </Link>
         </li>
-        <li>
-          <Link
-            to="/seller"
-            className="text-blue-600 hover:text-blue-900 font-bold"
-          >
-            Become Seller
-          </Link>
-        </li>
+
+        {userrole === "admin" ? (
+          <li>
+            <Link
+              to="/admin"
+              className="text-blue-600 hover:text-blue-900 font-bold"
+            >
+              AdminHome
+            </Link>
+          </li>
+        ) : null}
         {user ? (
           <>
             <li>
@@ -58,7 +61,20 @@ function Nav() {
         ) : (
           <>
             <li>
-              <button onClick={handleLogin}>Log In</button>
+              <Link
+                to="/login"
+                className="text-blue-600 hover:text-blue-900 font-bold"
+              >
+                Log In
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/seller"
+                className="text-blue-600 hover:text-blue-900 font-bold"
+              >
+                Seller
+              </Link>
             </li>
           </>
         )}
