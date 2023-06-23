@@ -258,7 +258,8 @@ function UpdateSeller() {
           onSubmit={handleSubmit}
           className="max-w-md mx-auto border-4 border-gray-300 p-14"
         >
-          {seller.status === "rejected" ? (
+          {seller.status === "rejected" &&
+          (seller.role === "seller" || "admin") ? (
             <>
               <label htmlFor="first_name" className="block mb-2">
                 First Name:
@@ -401,7 +402,7 @@ function UpdateSeller() {
                     </div>
                     {seller.resume ? (
                       <div className="mb-2">
-                        <p>Your Resume</p>
+                        <p>Resume</p>
                         <embed
                           src={seller.resume}
                           type="application/pdf"
@@ -423,7 +424,8 @@ function UpdateSeller() {
                 </div>
               </div>
 
-              {seller.status === "approved" ? (
+              {seller.status === "approved" &&
+              (seller.role === "seller" || "admin") ? (
                 <>
                   {seller.resume ? (
                     <>
@@ -474,71 +476,72 @@ function UpdateSeller() {
               ) : null}
             </>
           )}
-          <>
-            <label htmlFor="email" className="block mb-2">
-              Email Address:
-            </label>
-            <input
-              type="email"
-              onChange={handleInput}
-              value={data.email}
-              name="email"
-              required
-              className="border border-gray-300 p-2 mb-2 focus:outline-none focus:border-blue-500"
-            />
-            <label htmlFor="phone" className="block mb-2">
-              Phone:
-            </label>
-            <input
-              type="number"
-              onChange={handleInput}
-              value={data.phone}
-              name="phone"
-              autoComplete="phone"
-              required
-              className="border border-gray-300 p-2 mb-2 focus:outline-none focus:border-blue-500"
-            />
+          {seller.role === "seller" || "admin" ? (
+            <>
+              <label htmlFor="email" className="block mb-2">
+                Email Address:
+              </label>
+              <input
+                type="email"
+                onChange={handleInput}
+                value={data.email}
+                name="email"
+                required
+                className="border border-gray-300 p-2 mb-2 focus:outline-none focus:border-blue-500"
+              />
+              <label htmlFor="phone" className="block mb-2">
+                Phone:
+              </label>
+              <input
+                type="number"
+                onChange={handleInput}
+                value={data.phone}
+                name="phone"
+                autoComplete="phone"
+                required
+                className="border border-gray-300 p-2 mb-2 focus:outline-none focus:border-blue-500"
+              />
 
-            <label htmlFor="password" className="block mb-2">
-              Old Password or Reset Password:
-            </label>
-            <input
-              type="password"
-              onChange={handleInput}
-              name="password"
-              value={data.password}
-              autoComplete="new-password"
-              required
-              className="border border-gray-300 p-2 mb-2 focus:outline-none focus:border-blue-500"
-            />
-            <label htmlFor="cpassword" className="block mb-2">
-              Confirm password:
-            </label>
-            <input
-              type="password"
-              onChange={handleInput}
-              name="cpassword"
-              autoComplete="off"
-              required
-              className="border border-gray-300 p-2 mb-2 focus:outline-none focus:border-blue-500"
-            />
-            <button type="submit" className="text-red-500 mb-2">
-              <Link
-                to={`/seller/delete/${seller.user._id}?first_name=${seller.user.first_name}`}
-                className="text-red-500"
+              <label htmlFor="password" className="block mb-2">
+                Old Password or Reset Password:
+              </label>
+              <input
+                type="password"
+                onChange={handleInput}
+                name="password"
+                value={data.password}
+                autoComplete="new-password"
+                required
+                className="border border-gray-300 p-2 mb-2 focus:outline-none focus:border-blue-500"
+              />
+              <label htmlFor="cpassword" className="block mb-2">
+                Confirm password:
+              </label>
+              <input
+                type="password"
+                onChange={handleInput}
+                name="cpassword"
+                autoComplete="off"
+                required
+                className="border border-gray-300 p-2 mb-2 focus:outline-none focus:border-blue-500"
+              />
+              <button type="submit" className="text-red-500 mb-2">
+                <Link
+                  to={`/seller/delete/${seller.user._id}?first_name=${seller.user.first_name}`}
+                  className="text-red-500"
+                >
+                  <AiFillDelete /> Delete your account
+                </Link>
+              </button>
+              <p>{error}</p>
+              <button
+                type="submit"
+                className="bg-blue-500 text-white py-2 px-4 rounded"
               >
-                <AiFillDelete /> Delete your account
-              </Link>
-            </button>
-            <p>{error}</p>
-            <button
-              type="submit"
-              className="bg-blue-500 text-white py-2 px-4 rounded"
-            >
-              Update your profile
-            </button>
-          </>
-          {/* ) : null} */}
+                Update your profile
+              </button>
+            </>
+          ) : null}
         </form>
       )}
     </main>
